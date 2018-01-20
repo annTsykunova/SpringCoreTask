@@ -9,7 +9,7 @@ import com.epam.spring.hometask.model.EventRating;
 import com.epam.spring.hometask.model.Ticket;
 import com.epam.spring.hometask.model.User;
 import com.epam.spring.hometask.service.BookingService;
-import com.epam.spring.hometask.service.DiscountService;
+import com.epam.spring.hometask.service.discount.DiscountService;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -33,7 +33,7 @@ public class BookingServiceImpl implements BookingService {
       @Nonnull Set<Long> seats) throws ServiceException {
     double basePrice = event.getBasePrice();
     double price;
-    int discount = 0;
+    double discount = 0;
     try {
       discount = discountService.getDiscount(user, event, dateTime, seats.size());
       Set<Long> vipSeats = event.getAuditoriums().floorEntry(dateTime).getValue().getVipSeats();
@@ -79,5 +79,17 @@ public class BookingServiceImpl implements BookingService {
       throw new ServiceException();
     }
     return tickets;
+  }
+
+  public void setTicketDAO(TicketDAO ticketDAO) {
+    this.ticketDAO = ticketDAO;
+  }
+
+  public void setUserDAO(UserDAO userDAO) {
+    this.userDAO = userDAO;
+  }
+
+  public void setDiscountService(DiscountService discountService) {
+    this.discountService = discountService;
   }
 }

@@ -1,5 +1,6 @@
 package com.epam.spring.hometask.ui.console.state;
 
+import com.epam.spring.hometask.exception.ServiceException;
 import com.epam.spring.hometask.model.Auditorium;
 import com.epam.spring.hometask.service.AuditoriumService;
 import org.springframework.context.ApplicationContext;
@@ -41,20 +42,33 @@ public class AuditoriumManageState extends AbstractState {
     }
 
     private void searchAuditorium() {
-        String searchTerm = readStringInput("Input auditorium name: ");
-        Auditorium a = auditoriumService.getByName(searchTerm);
-        if (a == null) {
-            System.out.println("Not found (searched for: " + searchTerm + ")");
-        } else {
-            printAuditorium(a);
+        try {
+            String searchTerm = readStringInput("Input auditorium name: ");
+            Auditorium a = null;
+
+                a = auditoriumService.getByName(searchTerm);
+
+            if (a == null) {
+                System.out.println("Not found (searched for: " + searchTerm + ")");
+            } else {
+                printAuditorium(a);
+            }
+        } catch (ServiceException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     protected void printDefaultInformation() {
         System.out.println("All auditoriums:");
-        Set<Auditorium> all = auditoriumService.getAll();
-        all.forEach(a -> printAuditorium(a));
+        Set<Auditorium> all = null;
+        try {
+            all = auditoriumService.getAll();
+
+            all.forEach(a -> printAuditorium(a));
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
     }
 
     private void printAuditorium(Auditorium a) {

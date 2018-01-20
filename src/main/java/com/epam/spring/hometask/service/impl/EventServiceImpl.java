@@ -71,4 +71,8 @@ public class EventServiceImpl implements EventService {
     }
     return events;
   }
+
+  public void setEventDAO(EventDAO eventDAO) {
+    this.eventDAO = eventDAO;
+  }
 }

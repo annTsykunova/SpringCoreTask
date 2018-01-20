@@ -1,5 +1,6 @@
 package com.epam.spring.hometask.ui.console;
 
+import com.epam.spring.hometask.exception.ServiceException;
 import com.epam.spring.hometask.model.Auditorium;
 import com.epam.spring.hometask.model.Event;
 import com.epam.spring.hometask.model.EventRating;
@@ -31,8 +32,12 @@ public class SpringHometaskConsoleUI {
 
     public static void main(String[] args) {
         SpringHometaskConsoleUI ui = new SpringHometaskConsoleUI();
-        ui.initContext();
-        ui.run();
+        try {
+            ui.initContext();
+            ui.run();
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initContext() {
@@ -41,7 +46,7 @@ public class SpringHometaskConsoleUI {
         //throw new IllegalStateException("Please, add Spring context initialization logic here");
     }
 
-    private void run() {
+    private void run() throws ServiceException {
         System.out.println("Welcome to movie theater console service");
         
         fillInitialData();
@@ -53,7 +58,7 @@ public class SpringHometaskConsoleUI {
         System.out.println("Exiting.. Thank you.");
     }
 
-    private void fillInitialData() {
+    private void fillInitialData() throws ServiceException {
         UserService userService = context.getBean(UserService.class);
         EventService eventService = context.getBean(EventService.class);
         AuditoriumService auditoriumService = context.getBean(AuditoriumService.class);

@@ -1,5 +1,6 @@
 package com.epam.spring.hometask.ui.console.state;
 
+import com.epam.spring.hometask.exception.ServiceException;
 import com.epam.spring.hometask.model.User;
 import com.epam.spring.hometask.service.UserService;
 import org.springframework.context.ApplicationContext;
@@ -38,11 +39,16 @@ public class UserManageState extends AbstractDomainObjectManageState<User, UserS
 
     private void findUserByEmail() {
         String email = readStringInput("Input user e-mail: ");
-        User user = service.getUserByEmail(email);
-        if (user == null) {
-            System.out.println("Not found (searched for " + email + ")");
-        } else {
-            printObject(user);
+        User user = null;
+        try {
+            user = service.getUserByEmail(email);
+            if (user == null) {
+                System.out.println("Not found (searched for " + email + ")");
+            } else {
+                printObject(user);
+            }
+        } catch (ServiceException e) {
+            e.printStackTrace();
         }
     }
 

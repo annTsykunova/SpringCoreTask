@@ -1,6 +1,7 @@
 package com.epam.spring.hometask.ui.console.state;
 
 
+import com.epam.spring.hometask.exception.ServiceException;
 import com.epam.spring.hometask.model.Auditorium;
 import com.epam.spring.hometask.model.Event;
 import com.epam.spring.hometask.service.AuditoriumService;
@@ -58,23 +59,29 @@ public class EventInfoManageState extends AbstractState {
 
     private void assignAuditorium() {
         System.out.println("Select auditorium:");
-        List<Auditorium> list = auditoriumService.getAll().stream().collect(Collectors.toList());
-        for (int i = 0; i < list.size(); i++) {
-            System.out.println("[" + (i+1) + "] " + list.get(i).getName());
-        }
-        int auditoriumIndex = readIntInput("Input index: ", list.size()) - 1;
-        Auditorium aud = list.get(auditoriumIndex);
-        System.out.println("Assigning auditorium: " + aud.getName());
-        List<LocalDateTime> datesList = event.getAirDates().stream().collect(Collectors.toList());
-        for (int i = 0; i < datesList.size(); i++) {
-            System.out.println("[" + (i+1) + "] " + formatDateTime(datesList.get(i)));
-        }
-        int dateTimeIndex = readIntInput("Input air dateTime index: ", datesList.size()) - 1;
-        LocalDateTime dt = datesList.get(dateTimeIndex);
-        if (event.assignAuditorium(dt, aud)) {
-            System.out.println("Assigned auditorium for air dateTime: " + formatDateTime(dt));
-        } else {
-            System.err.println("Failed to assign for air dateTime: " + formatDateTime(dt));
+        List<Auditorium> list = null;
+        try {
+            list = auditoriumService.getAll().stream().collect(Collectors.toList());
+
+            for (int i = 0; i < list.size(); i++) {
+                System.out.println("[" + (i+1) + "] " + list.get(i).getName());
+            }
+            int auditoriumIndex = readIntInput("Input index: ", list.size()) - 1;
+            Auditorium aud = list.get(auditoriumIndex);
+            System.out.println("Assigning auditorium: " + aud.getName());
+            List<LocalDateTime> datesList = event.getAirDates().stream().collect(Collectors.toList());
+            for (int i = 0; i < datesList.size(); i++) {
+                System.out.println("[" + (i+1) + "] " + formatDateTime(datesList.get(i)));
+            }
+            int dateTimeIndex = readIntInput("Input air dateTime index: ", datesList.size()) - 1;
+            LocalDateTime dt = datesList.get(dateTimeIndex);
+            if (event.assignAuditorium(dt, aud)) {
+                System.out.println("Assigned auditorium for air dateTime: " + formatDateTime(dt));
+            } else {
+                System.err.println("Failed to assign for air dateTime: " + formatDateTime(dt));
+            }
+        } catch (ServiceException e) {
+            e.printStackTrace();
         }
     }
 
@@ -85,9 +92,14 @@ public class EventInfoManageState extends AbstractState {
     }
 
     private void addAirDate() {
-        LocalDateTime airDate = readDateTimeInput("Air date (" + DATE_TIME_INPUT_PATTERN + "): ");
-        event.addAirDateTime(airDate);
-        eventService.save(event);
+        try {
+            LocalDateTime airDate = readDateTimeInput("Air date (" + DATE_TIME_INPUT_PATTERN + "): ");
+            event.addAirDateTime(airDate);
+
+            eventService.save(event);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
     }
 
     private void viewAirDates() {

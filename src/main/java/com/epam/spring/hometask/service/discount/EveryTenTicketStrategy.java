@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 public class EveryTenTicketStrategy implements DiscountStrategy {
   private int discountValue;
 
-
   public void setDiscountValue(int discountValue) {
     this.discountValue = discountValue;
   }

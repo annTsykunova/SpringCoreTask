@@ -1,5 +1,6 @@
 package com.epam.spring.hometask.ui.console.state;
 
+import com.epam.spring.hometask.exception.ServiceException;
 import com.epam.spring.hometask.model.Auditorium;
 import com.epam.spring.hometask.model.DomainObject;
 import com.epam.spring.hometask.model.Event;
@@ -64,79 +65,98 @@ public class BookingState extends AbstractState {
 
     private void getBookedTickets() {
         System.out.println("> Select event: ");
-        Event event = selectDomainObject(eventService, e -> e.getName());
-        if (event == null) {
-            System.err.println("No event found");
-            return;
+        try {
+            Event event = selectDomainObject(eventService, e -> e.getName());
+            if (event == null) {
+                System.err.println("No event found");
+                return;
+            }
+
+            System.out.println("> Select air dates: ");
+            LocalDateTime airDate = selectAirDate(event.getAirDates());
+
+            printDelimiter();
+            Set<Ticket> bookedTickets = null;
+
+                bookedTickets = bookingService.getPurchasedTicketsForEvent(event, airDate);
+
+            bookedTickets.forEach(t -> System.out.println("Seat " + t.getSeat() + "\t for " + t.getUser().getEmail()));
+        } catch (ServiceException e) {
+            e.printStackTrace();
         }
-        
-        System.out.println("> Select air dates: ");
-        LocalDateTime airDate = selectAirDate(event.getAirDates());
-        
-        printDelimiter();
-        Set<Ticket> bookedTickets = bookingService.getPurchasedTicketsForEvent(event, airDate);
-        bookedTickets.forEach(t -> System.out.println("Seat " + t.getSeat() + "\t for " + t.getUser().getEmail()));
     }
 
     private void bookTickets() {
         System.out.println("> Select event: ");
-        final Event event = selectDomainObject(eventService, e -> e.getName());
-        if (event == null) {
-            System.err.println("No event found");
-            return;
+        try {
+            final Event event = selectDomainObject(eventService, e -> e.getName());
+            if (event == null) {
+                System.err.println("No event found");
+                return;
+            }
+
+            System.out.println("> Select air dates: ");
+            final LocalDateTime airDate = selectAirDate(event.getAirDates());
+            System.out.println("> Select seats: ");
+            final Set<Long> seats = selectSeats(event, airDate);
+            System.out.println("> Select user: ");
+            final User userForBooking;
+            User user = selectDomainObject(userService, u -> u.getFirstName() + " " + u.getLastName());
+            if (user == null) {
+                System.out.println("No user found. Input user info for booking: ");
+                String email = readStringInput("Email: ");
+                String firstName = readStringInput("First name: ");
+                String lastName = readStringInput("Last name: ");
+                userForBooking = new User();
+                userForBooking.setEmail(email);
+                userForBooking.setFirstName(firstName);
+                userForBooking.setLastName(lastName);
+            } else {
+                userForBooking = user;
+            }
+
+            Set<Ticket> ticketsToBook = seats.stream().map(seat -> new Ticket(userForBooking, event, airDate, seat)).collect(Collectors.toSet());
+
+                bookingService.bookTickets(ticketsToBook);
+
+            double price = bookingService.getTicketsPrice(event, airDate, user, seats);
+
+            System.out.println("Tickets booked! Total price: " + price);
+        } catch (ServiceException e) {
+            e.printStackTrace();
         }
-        
-        System.out.println("> Select air dates: ");
-        final LocalDateTime airDate = selectAirDate(event.getAirDates());
-        System.out.println("> Select seats: ");
-        final Set<Long> seats = selectSeats(event, airDate);
-        System.out.println("> Select user: ");
-        final User userForBooking;
-        User user = selectDomainObject(userService, u -> u.getFirstName() + " " + u.getLastName());
-        if (user == null) {
-            System.out.println("No user found. Input user info for booking: ");
-            String email = readStringInput("Email: ");
-            String firstName = readStringInput("First name: ");
-            String lastName = readStringInput("Last name: ");
-            userForBooking = new User();
-            userForBooking.setEmail(email);
-            userForBooking.setFirstName(firstName);
-            userForBooking.setLastName(lastName);
-        } else {
-            userForBooking = user;
-        }
-        
-        Set<Ticket> ticketsToBook = seats.stream().map(seat -> new Ticket(userForBooking, event, airDate, seat)).collect(Collectors.toSet());
-        bookingService.bookTickets(ticketsToBook);
-        double price = bookingService.getTicketsPrice(event, airDate, user, seats);
-        
-        System.out.println("Tickets booked! Total price: " + price);
     }
 
     private void getTicketsPrice() {
         System.out.println("> Select event: ");
-        Event event = selectDomainObject(eventService, e -> e.getName());
-        if (event == null) {
-            System.err.println("No event found");
-            return;
+        try {
+            Event event = selectDomainObject(eventService, e -> e.getName());
+            if (event == null) {
+                System.err.println("No event found");
+                return;
+            }
+
+            System.out.println("> Select air dates: ");
+            LocalDateTime airDate = selectAirDate(event.getAirDates());
+            System.out.println("> Select seats: ");
+            Set<Long> seats = selectSeats(event, airDate);
+            System.out.println("> Select user: ");
+            User user = selectDomainObject(userService, u -> u.getFirstName() + " " + u.getLastName());
+            if (user == null) {
+                System.out.println("No user found");
+            }
+
+            double price = 0;
+
+                price = bookingService.getTicketsPrice(event, airDate, user, seats);
+            printDelimiter();
+            System.out.println("Price for tickets: " + price);
+        } catch (ServiceException e) {
+            e.printStackTrace();
         }
-        
-        System.out.println("> Select air dates: ");
-        LocalDateTime airDate = selectAirDate(event.getAirDates());
-        System.out.println("> Select seats: ");
-        Set<Long> seats = selectSeats(event, airDate);
-        System.out.println("> Select user: ");
-        User user = selectDomainObject(userService, u -> u.getFirstName() + " " + u.getLastName());
-        if (user == null) {
-            System.out.println("No user found");
-        }
-        
-        double price = bookingService.getTicketsPrice(event, airDate, user, seats);
-        printDelimiter();
-        System.out.println("Price for tickets: " + price);
     }
 
-    private Set<Long> selectSeats(Event event, LocalDateTime airDate) {
+    private Set<Long> selectSeats(Event event, LocalDateTime airDate) throws ServiceException {
         Auditorium aud = event.getAuditoriums().get(airDate);
 
         Set<Ticket> tickets = bookingService.getPurchasedTicketsForEvent(event, airDate);
@@ -168,7 +188,7 @@ public class BookingState extends AbstractState {
         return list.get(dateIndex);
     }
 
-    private <T extends DomainObject> T selectDomainObject(AbstractDomainObjectService<T> service, Function<T, String> displayFunction) {
+    private <T extends DomainObject> T selectDomainObject(AbstractDomainObjectService<T> service, Function<T, String> displayFunction) throws ServiceException {
         if (!service.getAll().isEmpty()) {
             service.getAll().forEach(obj -> System.out.println("[" + obj.getId() + "] " + displayFunction.apply(obj)));
             long id = readIntInput("Input id (-1 for nothing): ");

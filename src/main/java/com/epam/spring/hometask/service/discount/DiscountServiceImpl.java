@@ -1,8 +1,8 @@
-package com.epam.spring.hometask.service.impl;
+package com.epam.spring.hometask.service.discount;
 
 import com.epam.spring.hometask.model.Event;
 import com.epam.spring.hometask.model.User;
-import com.epam.spring.hometask.service.DiscountService;
+import com.epam.spring.hometask.service.discount.DiscountService;
 import com.epam.spring.hometask.service.discount.DiscountStrategy;
 
 import java.time.LocalDateTime;
@@ -19,11 +19,15 @@ public class DiscountServiceImpl implements DiscountService {
   private List<DiscountStrategy> discountStrategyList;
 
   @Override
-  public int getDiscount(@Nullable User user, @Nonnull Event event, @Nonnull LocalDateTime airDateTime, long numberOfTickets) {
-    List<Integer> discounts = new ArrayList<>();
+  public double getDiscount(@Nullable User user, @Nonnull Event event, @Nonnull LocalDateTime airDateTime, long numberOfTickets) {
+    List<Double> discounts = new ArrayList<>();
     for(DiscountStrategy discountStrategy : discountStrategyList){
       discounts.add(discountStrategy.getDiscount(user, event,airDateTime,numberOfTickets));
     }
     return Collections.max(discounts);
+  }
+
+  public void setDiscountStrategyList(List<DiscountStrategy> discountStrategyList) {
+    this.discountStrategyList = discountStrategyList;
   }
 }

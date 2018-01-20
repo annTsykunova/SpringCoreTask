@@ -2,7 +2,6 @@ package com.epam.spring.hometask.service.discount;
 
 import com.epam.spring.hometask.model.Event;
 import com.epam.spring.hometask.model.User;
-import com.epam.spring.hometask.service.DiscountService;
 
 import java.time.LocalDateTime;
 import java.util.List;

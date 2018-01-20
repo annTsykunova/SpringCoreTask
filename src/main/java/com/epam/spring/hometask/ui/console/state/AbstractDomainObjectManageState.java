@@ -1,5 +1,6 @@
 package com.epam.spring.hometask.ui.console.state;
 
+import com.epam.spring.hometask.exception.ServiceException;
 import com.epam.spring.hometask.model.DomainObject;
 import com.epam.spring.hometask.service.AbstractDomainObjectService;
 
@@ -24,7 +25,7 @@ public abstract class AbstractDomainObjectManageState<T extends DomainObject, S 
     }
 
     @Override
-    protected void printDefaultInformation() {
+    protected void printDefaultInformation() throws ServiceException {
         System.out
                 .println("Currently there are " + service.getAll().size() + " " + getObjectName() + "s in the system");
     }
@@ -50,7 +51,7 @@ public abstract class AbstractDomainObjectManageState<T extends DomainObject, S 
     protected abstract void runSubAction(int action, int maxDefaultActions);
 
     @Override
-    protected final void runAction(int action) {
+    protected final void runAction(int action) throws ServiceException {
         switch (action) {
         case 1:
             addObject();
@@ -70,7 +71,7 @@ public abstract class AbstractDomainObjectManageState<T extends DomainObject, S 
         }
     }
     
-    private void removeObject() {
+    private void removeObject() throws ServiceException {
         int id = readIntInput("Input id: ");
         T obj = service.getById(Long.valueOf(id));
         if (obj == null) {
@@ -82,7 +83,7 @@ public abstract class AbstractDomainObjectManageState<T extends DomainObject, S 
         }
     }
 
-    private void findObjectById() {
+    private void findObjectById() throws ServiceException {
         int id = readIntInput("Input id: ");
         T obj = service.getById(Long.valueOf(id));
         if (obj == null) {
@@ -92,11 +93,11 @@ public abstract class AbstractDomainObjectManageState<T extends DomainObject, S 
         }
     }
 
-    private void printAllObjects() {
+    private void printAllObjects() throws ServiceException {
         service.getAll().forEach(obj -> printObject(obj));
     }
 
-    private void addObject() {
+    private void addObject() throws ServiceException {
         T obj = createObject();
 
         T newObj = service.save(obj);

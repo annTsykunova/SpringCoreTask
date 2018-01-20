@@ -1,5 +1,7 @@
 package com.epam.spring.hometask.ui.console.state;
 
+import com.epam.spring.hometask.exception.ServiceException;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
@@ -16,7 +18,7 @@ public abstract class AbstractState {
     
     private static Scanner scanner = new Scanner(System.in, "UTF-8");
     
-    public void run() {
+    public void run() throws ServiceException {
         printDefaultInformation();
         int action = 0;
         do {
@@ -86,11 +88,11 @@ public abstract class AbstractState {
         return DateTimeFormatter.ofPattern(DATE_TIME_INPUT_PATTERN).format(dt);
     }
     
-    protected abstract void printDefaultInformation();
+    protected abstract void printDefaultInformation() throws ServiceException;
 
     protected abstract int printMainActions();
 
-    protected abstract void runAction(int action);
+    protected abstract void runAction(int action) throws ServiceException;
     
     private int readUserActionInput(int maxInput) {
         do {

@@ -1,5 +1,6 @@
 package com.epam.spring.hometask.ui.console.state;
 
+import com.epam.spring.hometask.exception.ServiceException;
 import com.epam.spring.hometask.model.Event;
 import com.epam.spring.hometask.model.EventRating;
 import com.epam.spring.hometask.service.AuditoriumService;
@@ -86,25 +87,36 @@ public class EventManageState extends AbstractDomainObjectManageState<Event, Eve
 
     private void manageEventInfo() {
         int id = readIntInput("Input event id: ");
-        
-        Event event = service.getById(Long.valueOf(id));
-        if (event == null) {
-            System.out.println("Not found (searched for " + id + ")");
-        } else {
-            printDelimiter();
-            
-            AbstractState manageState = new EventInfoManageState(event, service, auditoriumService);
-            manageState.run();
+
+        Event event = null;
+        try {
+            event = service.getById(Long.valueOf(id));
+            if (event == null) {
+                System.out.println("Not found (searched for " + id + ")");
+            } else {
+                printDelimiter();
+
+                AbstractState manageState = new EventInfoManageState(event, service, auditoriumService);
+                manageState.run();
+            }
+        } catch (ServiceException e) {
+            e.printStackTrace();
         }
     }
 
     private void findEventByName() {
         String name = readStringInput("Input event name: ");
-        Event event = service.getByName(name);
-        if (event == null) {
-            System.out.println("Not found (searched for " + name + ")");
-        } else {
-            printObject(event);
+        Event event = null;
+        try {
+            event = service.getByName(name);
+
+            if (event == null) {
+                System.out.println("Not found (searched for " + name + ")");
+            } else {
+                printObject(event);
+            }
+        } catch (ServiceException e) {
+            e.printStackTrace();
         }
     }
 

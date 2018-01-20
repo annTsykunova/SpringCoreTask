@@ -40,4 +40,8 @@ public class AuditoriumServiceImpl implements AuditoriumService {
     }
     return auditorium;
   }
+
+  public void setAuditoriumDAO(AuditoriumDAO auditoriumDAO) {
+    this.auditoriumDAO = auditoriumDAO;
+  }
 }

@@ -1,4 +1,4 @@
-package com.epam.spring.hometask.service;
+package com.epam.spring.hometask.service.discount;
 
 import com.epam.spring.hometask.exception.ServiceException;
 import com.epam.spring.hometask.model.Event;
@@ -27,6 +27,6 @@ public interface DiscountService {
      *            Number of tickets that user buys
      * @return discount value from 0 to 100
      */
-    int getDiscount(@Nullable User user, @Nonnull Event event, @Nonnull LocalDateTime airDateTime, long numberOfTickets) throws ServiceException;
+    double getDiscount(@Nullable User user, @Nonnull Event event, @Nonnull LocalDateTime airDateTime, long numberOfTickets) throws ServiceException;
 
 }
