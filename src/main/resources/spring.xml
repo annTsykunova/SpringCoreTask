@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+ 		http://www.springframework.org/schema/beans
+ 		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        http://www.springframework.org/schema/util
+ 		http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:october-cinema.properties</value>
+                <value>classpath:velcom-cinema.properties</value>
+            </list>
+        </property>
+        <property name="ignoreResourceNotFound" value="true" />
+        <property name="systemPropertiesMode">
+            <util:constant
+                    static-field="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer.SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+        </property>
+    </bean>
+
+    <bean id="auditoriumOctober" class="com.epam.spring.hometask.model.Auditorium">
+        <constructor-arg value="${name}" />
+        <constructor-arg value="${seats.number}" />
+        <constructor-arg value="${seats.vip}" />
+    </bean>
+
+    <bean id="auditoriumVelcom" class="com.epam.spring.hometask.model.Auditorium">
+        <constructor-arg value="${name}" />
+        <constructor-arg value="${seats.number}" />
+        <constructor-arg value="${seats.vip}" />
+    </bean>
+
+
+    <bean id="auditoriumDAO" class="com.epam.spring.hometask.dao.AuditoriumDAO"/>
+    <bean id="eventDAO" class="com.epam.spring.hometask.dao.EventDAO"/>
+    <bean id="ticketDAO" class="com.epam.spring.hometask.dao.TicketDAO"/>
+    <bean id="userDAO" class="com.epam.spring.hometask.dao.UserDAO"/>
+
+    <bean id="auditoriumService" class="com.epam.spring.hometask.service.AuditoriumService"/>
+    <bean id="bookingService" class="com.epam.spring.hometask.service.BookingService"/>
+    <bean id="discountService" class="com.epam.spring.hometask.service.DiscountService"/>
+    <bean id="eventService" class="com.epam.spring.hometask.service.EventService"/>
+    <bean id="userService" class="com.epam.spring.hometask.service.UserService"/>
+
+</beans>
