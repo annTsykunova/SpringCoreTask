@@ -13,5 +13,4 @@ import java.util.Set;
  */
 public interface TicketDAO extends AbstractDAO<Ticket,Long> {
 
-  Set<Ticket> getPurchasedTicketsForEvent(Event event, LocalDateTime dateTime) throws DAOException;
 }

@@ -5,6 +5,7 @@ import com.epam.spring.hometask.dao.TicketDAO;
 import com.epam.spring.hometask.exception.DAOException;
 import com.epam.spring.hometask.model.Event;
 import com.epam.spring.hometask.model.Ticket;
+import com.epam.spring.hometask.utils.GeneratorId;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -18,15 +19,26 @@ import java.util.Set;
  */
 public class TicketDAOImpl implements TicketDAO {
 
-  private Map<Long,Ticket> tickets = new HashMap<>();
+  private Set<Ticket> tickets = new HashSet<>();
 
   @Override
   public Ticket getById(Long key) throws DAOException {
+    for (Ticket ticket: tickets) {
+      if (ticket.getId() == key) {
+        return ticket;
+      }
+    }
     return null;
   }
 
   @Override
-  public Ticket save(Ticket persistenceObject) throws DAOException {
+  public Ticket save(Ticket ticket) throws DAOException {
+    Long id = GeneratorId.generateId();
+    ticket.setId(id);
+    boolean flag = tickets.add(ticket);
+    if (flag) {
+      return ticket;
+    }
     return null;
   }
 
@@ -37,19 +49,7 @@ public class TicketDAOImpl implements TicketDAO {
 
   @Override
   public Collection<Ticket> getAll() throws DAOException {
-    return tickets.values();
+    return tickets;
   }
 
-  @Override
-  public Set<Ticket> getPurchasedTicketsForEvent(Event event, LocalDateTime dateTime) throws DAOException {
-    Set<Ticket> purchasedTicket = new HashSet<>();
-    for(Ticket ticket: tickets.values()){
-      if (ticket.getEvent().equals(event)){
-        if (ticket.getEvent().getAirDates().contains(dateTime)){
-          purchasedTicket.add(ticket);
-        }
-      }
-    }
-    return purchasedTicket;
-  }
 }

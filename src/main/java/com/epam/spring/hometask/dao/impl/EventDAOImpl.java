@@ -8,24 +8,36 @@ import com.epam.spring.hometask.utils.GeneratorId;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Hanna_Tsykunova on 1/17/2018.
  */
 public class EventDAOImpl implements EventDAO {
 
-  private Map<Long,Event> events = new HashMap<>();
+  private Set<Event> events = new HashSet<>();
 
   @Override
   public Event getById(Long key) throws DAOException {
-    return events.get(key);
+    for (Event event: events) {
+      if (event.getId() == key) {
+        return event;
+      }
+    }
+    return null;
   }
 
   @Override
   public Event save(Event event) throws DAOException {
     Long id = GeneratorId.generateId();
-    return events.put(id, event);
+    event.setId(id);
+    boolean flag = events.add(event);
+    if (flag) {
+      return event;
+    }
+    return null;
   }
 
   @Override
@@ -35,12 +47,12 @@ public class EventDAOImpl implements EventDAO {
 
   @Override
   public Collection<Event> getAll() throws DAOException {
-    return events.values();
+    return events;
   }
 
   @Override
   public Event getByName(String name) throws DAOException {
-    for (Event event: events.values()) {
+    for (Event event: events) {
       if (event.getName().equals(name)){
         return event;
       }

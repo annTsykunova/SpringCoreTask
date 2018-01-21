@@ -34,7 +34,11 @@ public class AuditoriumDAOImpl implements AuditoriumDAO {
   @Override
   public Auditorium save(Auditorium auditorium) throws DAOException {
     Long id = GeneratorId.generateId();
-    return auditoriums.put(id, auditorium);
+    Auditorium savedAuditorium = auditoriums.put(id, auditorium);
+    if (savedAuditorium != null){
+      return savedAuditorium;
+    }
+    return auditorium;
   }
 
   @Override
@@ -45,5 +49,9 @@ public class AuditoriumDAOImpl implements AuditoriumDAO {
   @Override
   public Collection<Auditorium> getAll() throws DAOException {
     return auditoriums.values();
+  }
+
+  public void setAuditoriums(Map<Long, Auditorium> auditoriums) {
+    this.auditoriums = auditoriums;
   }
 }

@@ -1,5 +1,6 @@
 package com.epam.spring.hometask.ui.console.state;
 
+import com.epam.spring.hometask.exception.ServiceException;
 import org.springframework.context.ApplicationContext;
 
 import java.util.HashMap;
@@ -22,7 +23,7 @@ public class MainState extends AbstractState {
     }
 
     @Override
-    protected void runAction(int action) {
+    protected void runAction(int action) throws ServiceException {
         AbstractState state = childStates.get(action);
         if (state != null) {
             state.run();

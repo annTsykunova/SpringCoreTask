@@ -22,11 +22,18 @@ public class BirthdayStrategy implements DiscountStrategy {
   @Override
   public double getDiscount(User user, Event event, LocalDateTime airDateTime, long numberOfTickets) {
     final int days = 5;
-    List<LocalDateTime> dates = Stream.iterate(airDateTime, d -> d.plusDays(1))
-        .limit(days)
-        .collect(Collectors.toList());
-    if (dates.contains(user.getBirthDate())){
-      return discountValue;
+    if (user.getBirthDate() != null) {
+      List<LocalDateTime> datesPlus = Stream.iterate(airDateTime, d -> d.plusDays(1))
+          .limit(days)
+          .collect(Collectors.toList());
+      List<LocalDateTime> datesMinus = Stream.iterate(airDateTime, d -> d.minusDays(1))
+          .limit(days)
+          .collect(Collectors.toList());
+      LocalDateTime userDate = LocalDateTime.of(airDateTime.getYear(), user.getBirthDate().getMonth(), user.getBirthDate().getDayOfMonth(), airDateTime.getHour(), airDateTime.getMinute());
+
+      if (datesMinus.contains(userDate) || datesPlus.contains(userDate)) {
+          return discountValue;
+      }
     }
     return 0;
   }

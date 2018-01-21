@@ -17,6 +17,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Simple console UI application for the hometask code. UI provides different
@@ -42,7 +44,7 @@ public class SpringHometaskConsoleUI {
 
     private void initContext() {
        context =
-            new ClassPathXmlApplicationContext(new String[] {"spring.xml"});
+           new ClassPathXmlApplicationContext("spring.xml");
         //throw new IllegalStateException("Please, add Spring context initialization logic here");
     }
 
@@ -76,7 +78,8 @@ public class SpringHometaskConsoleUI {
         user.setEmail("my@email.com");
         user.setFirstName("Foo");
         user.setLastName("Bar");
-        
+        LocalDateTime birthDay = LocalDateTime.of(1995, 6, 14, 0, 0);
+        user.setBirthDate(birthDay);
         user = userService.save(user);
         
         Event event = new Event();
@@ -90,14 +93,20 @@ public class SpringHometaskConsoleUI {
         
         Ticket ticket1 = new Ticket(user, event, airDate, 1);
         bookingService.bookTickets(Collections.singleton(ticket1));
+
         
         if (auditorium.getNumberOfSeats() > 1) {
             User userNotRegistered = new User();
             userNotRegistered.setEmail("somebody@a.b");
             userNotRegistered.setFirstName("A");
             userNotRegistered.setLastName("Somebody");
+            LocalDateTime birthDayNotRegistered = LocalDateTime.of(1995, 6, 14, 0, 0);
+            userNotRegistered.setBirthDate(birthDayNotRegistered);
             Ticket ticket2 = new Ticket(userNotRegistered, event, airDate, 2);
             bookingService.bookTickets(Collections.singleton(ticket2));
+            Set<Long> seats = new HashSet<>();
+            seats.add(ticket2.getSeat());
+            bookingService.getTicketsPrice(event,airDate,userNotRegistered,seats);
         }
     }
 }

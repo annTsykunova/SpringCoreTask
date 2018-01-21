@@ -24,40 +24,44 @@
         </property>
     </bean>
 
+    <bean id="auditoriumOct" class="com.epam.spring.hometask.model.Auditorium">
+        <constructor-arg index="0" value="${october.name}"/>
+        <constructor-arg index="1" value="${october.seats.number}"/>
+        <constructor-arg index="2" value="#{'${october.seats.vip}'.split(',')}"/>
+    </bean>
+
+    <bean id="auditoriumVelc" class="com.epam.spring.hometask.model.Auditorium">
+        <constructor-arg index="0" value="${velcom.name}"/>
+        <constructor-arg index="1" value="${velcom.seats.number}"/>
+        <constructor-arg index="2" value="#{'${velcom.seats.vip}'.split(',')}"/>
+    </bean>
+
+    <util:map id="auditoriumsMap" map-class="java.util.HashMap">
+        <entry key="111" value-ref="auditoriumOct"/>
+        <entry key="222" value-ref="auditoriumVelc"/>
+    </util:map>
     <bean id="auditoriumDaoProperties" class="com.epam.spring.hometask.dao.impl.AuditoriumDAOImpl">
-    <property name="auditoriums">
-        <list>
-            <bean class="com.epam.spring.hometask.model.Auditorium">
-                <constructor-arg index="0" value="${october.name}"/>
-                <constructor-arg index="1" value="${october.seats.number}"/>
-                <constructor-arg index="2" value="#{'${october.seats.vip}'.split(',')}"/>
-            </bean>
-            <bean class="com.epam.spring.hometask.model.Auditorium">
-                <constructor-arg index="0" value="${velcom.name}"/>
-                <constructor-arg index="1" value="${velcom.seats.number}"/>
-                <constructor-arg index="2" value="#{'${velcom.seats.vip}'.split(',')}"/>
-            </bean>
-        </list>
+    <property name="auditoriums" ref="auditoriumsMap">
     </property>
     </bean>
 
-    <bean id="eventDAO" class="com.epam.spring.hometask.dao.EventDAO"/>
-    <bean id="ticketDAO" class="com.epam.spring.hometask.dao.TicketDAO"/>
-    <bean id="userDAO" class="com.epam.spring.hometask.dao.UserDAO"/>
+    <bean id="eventDAO" class="com.epam.spring.hometask.dao.impl.EventDAOImpl"/>
+    <bean id="ticketDAO" class="com.epam.spring.hometask.dao.impl.TicketDAOImpl"/>
+    <bean id="userDAO" class="com.epam.spring.hometask.dao.impl.UserDAOImpl"/>
 
-    <bean id="auditoriumService" class="com.epam.spring.hometask.service.AuditoriumService">
-        <property name="auditoriumDao" ref="auditoriumDao"/>
+    <bean id="auditoriumService" class="com.epam.spring.hometask.service.impl.AuditoriumServiceImpl">
+        <property name="auditoriumDAO" ref="auditoriumDaoProperties"/>
     </bean>
-    <bean id="bookingService" class="com.epam.spring.hometask.service.BookingService">
+    <bean id="bookingService" class="com.epam.spring.hometask.service.impl.BookingServiceImpl">
         <property name="ticketDAO" ref="ticketDAO"/>
         <property name="userDAO" ref="userDAO"/>
         <property name="discountService" ref="discountService"/>
     </bean>
 
-    <bean id="eventService" class="com.epam.spring.hometask.service.EventService">
+    <bean id="eventService" class="com.epam.spring.hometask.service.impl.EventServiceImpl">
         <property name="eventDAO" ref="eventDAO"/>
     </bean>
-    <bean id="userService" class="com.epam.spring.hometask.service.UserService">
+    <bean id="userService" class="com.epam.spring.hometask.service.impl.UserServiceImpl">
         <property name="userDAO" ref="userDAO"/>
     </bean>
 

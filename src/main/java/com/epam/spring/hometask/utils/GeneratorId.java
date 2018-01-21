@@ -3,9 +3,9 @@ package com.epam.spring.hometask.utils;
 import java.util.Random;
 
 public class GeneratorId {
+  private static Long ID = new Long(0);
   public static Long generateId(){
-    Random randomno = new Random();
-    return randomno.nextLong();
+    return ++ID;
   }
 
 }

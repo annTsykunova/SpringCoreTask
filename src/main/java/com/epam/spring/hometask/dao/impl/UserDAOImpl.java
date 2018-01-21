@@ -33,8 +33,17 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public User save(User user) throws DAOException {
-    Long id = GeneratorId.generateId();
-    return users.put(id,user);
+    if (user.getId() != null){
+      users.put(user.getId(),user);
+    } else {
+      Long id = GeneratorId.generateId();
+      user.setId(id);
+      User savedUser = users.put(id, user);
+      if (savedUser != null) {
+        return savedUser;
+      }
+    }
+    return user;
   }
 
   @Override

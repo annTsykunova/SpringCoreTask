@@ -6,6 +6,7 @@ import com.epam.spring.hometask.exception.ServiceException;
 import com.epam.spring.hometask.model.Auditorium;
 import com.epam.spring.hometask.service.AuditoriumService;
 
+import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -22,7 +23,7 @@ public class AuditoriumServiceImpl implements AuditoriumService {
   public Set<Auditorium> getAll() throws ServiceException {
     Set<Auditorium> auditoriums;
     try {
-      auditoriums = (Set<Auditorium>) auditoriumDAO.getAll();
+      auditoriums = new HashSet<>(auditoriumDAO.getAll());
     } catch (DAOException e) {
       throw new ServiceException();
     }

@@ -13,6 +13,7 @@ import com.epam.spring.hometask.service.discount.DiscountService;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -58,6 +59,7 @@ public class BookingServiceImpl implements BookingService {
         if (users.contains(ticket.getUser())){
           User user = ticket.getUser();
           user.getTickets().add(ticket);
+
           userDAO.save(user);
         }
         ticketDAO.save(ticket);
@@ -72,13 +74,19 @@ public class BookingServiceImpl implements BookingService {
   @Nonnull
   @Override
   public Set<Ticket> getPurchasedTicketsForEvent(@Nonnull Event event, @Nonnull LocalDateTime dateTime) throws ServiceException {
-    Set<Ticket> tickets;
+      Set<Ticket> purchasedTicket = new HashSet<>();
     try {
-      tickets = ticketDAO.getPurchasedTicketsForEvent(event,dateTime);
-    } catch (DAOException e) {
+      for(Ticket ticket: ticketDAO.getAll()){
+        if (ticket.getEvent().equals(event)){
+          if (ticket.getEvent().getAirDates().contains(dateTime)){
+            purchasedTicket.add(ticket);
+          }
+        }
+      }
+      return purchasedTicket;
+    }catch (DAOException e) {
       throw new ServiceException();
     }
-    return tickets;
   }
 
   public void setTicketDAO(TicketDAO ticketDAO) {

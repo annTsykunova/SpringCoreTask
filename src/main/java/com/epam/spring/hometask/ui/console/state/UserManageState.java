@@ -60,7 +60,7 @@ public class UserManageState extends AbstractDomainObjectManageState<User, UserS
     @Override
     protected void printObject(User user) {
         System.out.println("[" + user.getId() + "] " + user.getFirstName() + " " + user.getLastName() + ", "
-                + user.getEmail() + ", bought " + user.getTickets().size() + " tickets");
+                + user.getEmail() + ", " + user.getBirthDate() +", bought " + user.getTickets().size() + " tickets");
     }
 
     @Override
