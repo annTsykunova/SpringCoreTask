@@ -29,6 +29,7 @@ public interface BookingService {
      * @param seats
      *            Set of seat numbers that user wants to buy
      * @return total price
+     * @throws ServiceException
      */
     public double getTicketsPrice(@Nonnull Event event, @Nonnull LocalDateTime dateTime, @Nullable User user,
         @Nonnull Set<Long> seats) throws ServiceException;
@@ -39,6 +40,7 @@ public interface BookingService {
      * 
      * @param tickets
      *            Set of tickets
+     * @throws ServiceException
      */
     public void bookTickets(@Nonnull Set<Ticket> tickets) throws ServiceException;
 
@@ -50,7 +52,10 @@ public interface BookingService {
      * @param dateTime
      *            Date and time of airing of event
      * @return set of all purchased tickets
+     * @throws ServiceException
      */
     public @Nonnull Set<Ticket> getPurchasedTicketsForEvent(@Nonnull Event event, @Nonnull LocalDateTime dateTime) throws ServiceException;
+
+
 
 }

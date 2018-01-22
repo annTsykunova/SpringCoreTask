@@ -161,12 +161,15 @@ public class BookingState extends AbstractState {
 
         Set<Ticket> tickets = bookingService.getPurchasedTicketsForEvent(event, airDate);
         List<Long> bookedSeats = tickets.stream().map(t -> t.getSeat()).collect(Collectors.toList());
-        List<Long> freeSeats = aud.getAllSeats().stream().filter(seat -> !bookedSeats.contains(seat))
-                .collect(Collectors.toList());
+        Set<Long> freeSeats = aud.getAllSeats().stream().filter(seat -> !bookedSeats.contains(seat))
+                .collect(Collectors.toSet());
 
         System.out.println("Free seats: ");
         System.out.println(freeSeats);
-        
+
+        if (!freeSeats.containsAll(inputSeats())) {
+            System.err.println("Input seats are not available");
+        }
         return inputSeats();
     }
 

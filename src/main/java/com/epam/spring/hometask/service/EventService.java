@@ -17,6 +17,7 @@ public interface EventService extends AbstractDomainObjectService<Event> {
      * @param name
      *            Name of the event
      * @return found event or <code>null</code>
+     * @throws ServiceException
      */
     public @Nullable
     Event getByName(@Nonnull String name) throws ServiceException;

@@ -46,7 +46,7 @@ public class BookingServiceImpl implements BookingService {
       price = (price * (100 - discount)) / 100;
     }
     catch (ServiceException e) {
-      throw new ServiceException();
+      throw new ServiceException("Exception: we have issue with tickets price");
     }
     return price;
   }
@@ -66,7 +66,7 @@ public class BookingServiceImpl implements BookingService {
       }
 
     } catch (DAOException e) {
-      throw new ServiceException();
+      throw new ServiceException("Exception: the tickets is not booked");
     }
 
   }
@@ -85,9 +85,10 @@ public class BookingServiceImpl implements BookingService {
       }
       return purchasedTicket;
     }catch (DAOException e) {
-      throw new ServiceException();
+      throw new ServiceException("Exception:can't get all tickets");
     }
   }
+
 
   public void setTicketDAO(TicketDAO ticketDAO) {
     this.ticketDAO = ticketDAO;

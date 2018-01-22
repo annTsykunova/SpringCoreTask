@@ -18,13 +18,8 @@ public class EveryTenTicketStrategy implements DiscountStrategy {
 
   @Override
   public double getDiscount(User user, Event event, LocalDateTime airDateTime, long numberOfTickets) {
-    if (numberOfTickets/10 >= 1){
-      if (numberOfTickets%10 == 0) {
-        return discountValue/10;
-      }else {
-        return discountValue/numberOfTickets;
-      }
-
+    if (numberOfTickets%10 == 9){
+      return discountValue;
     }
     return 0;
   }
