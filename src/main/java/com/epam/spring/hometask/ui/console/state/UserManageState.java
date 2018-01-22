@@ -5,6 +5,7 @@ import com.epam.spring.hometask.model.User;
 import com.epam.spring.hometask.service.UserService;
 import org.springframework.context.ApplicationContext;
 
+import java.time.LocalDateTime;
 import java.util.Locale;
 
 /**
@@ -69,11 +70,13 @@ public class UserManageState extends AbstractDomainObjectManageState<User, UserS
         String firstName = readStringInput("First name: ");
         String lastName = readStringInput("Last name: ");
         String email = readStringInput("E-mail: ");
+        LocalDateTime birthDate = readDateTimeInput("Birth date (" + DATE_TIME_INPUT_PATTERN + "): ");
 
         User user = new User();
         user.setEmail(email);
         user.setFirstName(firstName);
         user.setLastName(lastName);
+        user.setBirthDate(birthDate);
 
         return user;
     }

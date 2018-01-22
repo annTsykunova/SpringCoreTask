@@ -167,10 +167,12 @@ public class BookingState extends AbstractState {
         System.out.println("Free seats: ");
         System.out.println(freeSeats);
 
-        if (!freeSeats.containsAll(inputSeats())) {
+        Set<Long> seats = inputSeats();
+        if (!freeSeats.containsAll(seats)) {
             System.err.println("Input seats are not available");
+            return inputSeats();
         }
-        return inputSeats();
+        return seats;
     }
 
     private Set<Long> inputSeats() {
