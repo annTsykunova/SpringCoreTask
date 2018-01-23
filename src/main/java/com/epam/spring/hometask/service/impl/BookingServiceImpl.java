@@ -12,8 +12,10 @@ import com.epam.spring.hometask.service.BookingService;
 import com.epam.spring.hometask.service.discount.DiscountService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -33,22 +35,27 @@ public class BookingServiceImpl implements BookingService {
   public double getTicketsPrice(@Nonnull Event event, @Nonnull LocalDateTime dateTime, @Nullable User user,
       @Nonnull Set<Long> seats) throws ServiceException {
     double basePrice = event.getBasePrice();
-    double price;
+    double priceAll = 0;
     double discount = 0;
     try {
-      discount = discountService.getDiscount(user, event, dateTime, seats.size());
-      Set<Long> vipSeats = event.getAuditoriums().floorEntry(dateTime).getValue().getVipSeats();
-      long countOfVipSeats = seats.stream().filter(vipSeats::contains).count();
-      price = basePrice*countOfVipSeats*2 + basePrice*(seats.size()-countOfVipSeats);
-      if (event.getRating().equals(EventRating.HIGH)) {
-        price *= 1.2;
+      List<Long> listOfSeats = new ArrayList<>(seats);
+      Set<Long> vipSeats = event.getAuditoriums().get(dateTime).getVipSeats();
+      for (int i = 0; i < listOfSeats.size(); ++i) {
+        double price = 0;
+        if (vipSeats.contains(listOfSeats.get(i))) {
+          price += basePrice * 2;
+        } else {
+          price = basePrice;
+        }
+        discount = discountService.getDiscount(user, event, dateTime, i);
+        price *= (100 - discount) / 100;
+        priceAll += price;
       }
-      price = (price * (100 - discount)) / 100;
     }
     catch (ServiceException e) {
       throw new ServiceException("Exception: we have issue with tickets price");
     }
-    return price;
+    return priceAll;
   }
 
   @Override

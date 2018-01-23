@@ -5,9 +5,6 @@ import java.util.NavigableSet;
 import java.util.Objects;
 import java.util.TreeSet;
 
-/**
- * @author Yuriy_Tkach
- */
 public class User extends DomainObject {
 
     private String firstName;
@@ -18,6 +15,8 @@ public class User extends DomainObject {
 
     private LocalDateTime birthDate;
 
+    private NavigableSet<Ticket> tickets = new TreeSet<>();
+
     public LocalDateTime getBirthDate() {
         return birthDate;
     }
@@ -25,8 +24,6 @@ public class User extends DomainObject {
     public void setBirthDate(LocalDateTime birthDate) {
         this.birthDate = birthDate;
     }
-
-    private NavigableSet<Ticket> tickets = new TreeSet<>();
 
     public String getFirstName() {
         return firstName;

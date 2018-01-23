@@ -1,17 +1,12 @@
 package com.epam.spring.hometask.dao.impl;
 
-import com.epam.spring.hometask.dao.EventDAO;
 import com.epam.spring.hometask.dao.TicketDAO;
 import com.epam.spring.hometask.exception.DAOException;
-import com.epam.spring.hometask.model.Event;
 import com.epam.spring.hometask.model.Ticket;
 import com.epam.spring.hometask.utils.GeneratorId;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**

@@ -1,9 +1,5 @@
 package com.epam.spring.hometask;
 
-/**
- * Created by Hanna_Tsykunova on 1/23/2018.
- */
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
