@@ -10,6 +10,8 @@ import com.epam.spring.hometask.model.Ticket;
 import com.epam.spring.hometask.model.User;
 import com.epam.spring.hometask.service.BookingService;
 import com.epam.spring.hometask.service.discount.DiscountService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,17 +25,22 @@ import javax.annotation.Nullable;
 /**
  * Created by Hanna_Tsykunova on 1/17/2018.
  */
+@Service
 public class BookingServiceImpl implements BookingService {
 
+  @Autowired
   private TicketDAO ticketDAO;
 
+  @Autowired
   private UserDAO userDAO;
 
+  @Autowired
   private DiscountService discountService;
 
   @Override
   public double getTicketsPrice(@Nonnull Event event, @Nonnull LocalDateTime dateTime, @Nullable User user,
       @Nonnull Set<Long> seats) throws ServiceException {
+
     double basePrice = event.getBasePrice();
     double priceAll = 0;
     double discount = 0;
@@ -51,6 +58,10 @@ public class BookingServiceImpl implements BookingService {
         price *= (100 - discount) / 100;
         priceAll += price;
       }
+
+      if (EventRating.HIGH.equals(event.getRating())){
+        priceAll*= 1.2;
+      }
     }
     catch (ServiceException e) {
       throw new ServiceException("Exception: we have issue with tickets price");
@@ -61,14 +72,17 @@ public class BookingServiceImpl implements BookingService {
   @Override
   public void bookTickets(@Nonnull Set<Ticket> tickets) throws ServiceException {
     try {
+      Set<Long> seats;
       Collection<User> users = userDAO.getAll();
       for (Ticket ticket: tickets) {
         if (users.contains(ticket.getUser())){
           User user = ticket.getUser();
           user.getTickets().add(ticket);
-
           userDAO.save(user);
         }
+
+        double price = getTicketPrice(ticket.getEvent(),ticket.getDateTime(),ticket.getUser(),ticket.getSeat());
+        ticket.setPrice(price);
         ticketDAO.save(ticket);
       }
 
@@ -94,6 +108,24 @@ public class BookingServiceImpl implements BookingService {
     }catch (DAOException e) {
       throw new ServiceException("Exception:can't get all tickets");
     }
+  }
+
+  @Override
+  public double getTicketPrice(@Nonnull Event event, @Nonnull LocalDateTime dateTime, @Nullable User user,
+      @Nonnull long seat) throws ServiceException {
+    double basePrice = event.getBasePrice();
+    Set<Long> vipSeats = event.getAuditoriums().get(dateTime).getVipSeats();
+    double price = 0;
+    if (vipSeats.contains(seat)) {
+      price += basePrice * 2;
+    } else {
+      price = basePrice;
+    }
+    if (EventRating.HIGH.equals(event.getRating())) {
+      price *= 1.2;
+    }
+
+    return price;
   }
 
 

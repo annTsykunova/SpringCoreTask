@@ -4,6 +4,7 @@ import com.epam.spring.hometask.model.Event;
 import com.epam.spring.hometask.model.User;
 import com.epam.spring.hometask.service.discount.DiscountService;
 import com.epam.spring.hometask.service.discount.DiscountStrategy;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,9 +13,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-/**
- * Created by Hanna_Tsykunova on 1/17/2018.
- */
+@Service
 public class DiscountServiceImpl implements DiscountService {
   private List<DiscountStrategy> discountStrategyList;
 

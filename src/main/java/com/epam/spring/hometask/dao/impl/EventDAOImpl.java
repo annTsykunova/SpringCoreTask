@@ -4,6 +4,7 @@ import com.epam.spring.hometask.dao.EventDAO;
 import com.epam.spring.hometask.exception.DAOException;
 import com.epam.spring.hometask.model.Event;
 import com.epam.spring.hometask.utils.GeneratorId;
+import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.Date;
@@ -15,6 +16,7 @@ import java.util.Set;
 /**
  * Created by Hanna_Tsykunova on 1/17/2018.
  */
+@Repository
 public class EventDAOImpl implements EventDAO {
 
   private Set<Event> events = new HashSet<>();

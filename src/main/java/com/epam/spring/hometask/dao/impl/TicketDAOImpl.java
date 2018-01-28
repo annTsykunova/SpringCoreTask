@@ -4,6 +4,7 @@ import com.epam.spring.hometask.dao.TicketDAO;
 import com.epam.spring.hometask.exception.DAOException;
 import com.epam.spring.hometask.model.Ticket;
 import com.epam.spring.hometask.utils.GeneratorId;
+import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import java.util.Set;
 /**
  * Created by Hanna_Tsykunova on 1/17/2018.
  */
+@Repository
 public class TicketDAOImpl implements TicketDAO {
 
   private Set<Ticket> tickets = new HashSet<>();

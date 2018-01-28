@@ -4,6 +4,7 @@ import com.epam.spring.hometask.dao.AuditoriumDAO;
 import com.epam.spring.hometask.exception.DAOException;
 import com.epam.spring.hometask.model.Auditorium;
 import com.epam.spring.hometask.utils.GeneratorId;
+import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.Map;
 /**
  * Created by Hanna_Tsykunova on 1/17/2018.
  */
+@Repository
 public class AuditoriumDAOImpl implements AuditoriumDAO {
 
   private Map<Long,Auditorium> auditoriums = new HashMap<>();

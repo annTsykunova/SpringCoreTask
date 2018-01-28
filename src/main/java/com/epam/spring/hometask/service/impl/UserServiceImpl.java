@@ -5,6 +5,8 @@ import com.epam.spring.hometask.exception.DAOException;
 import com.epam.spring.hometask.exception.ServiceException;
 import com.epam.spring.hometask.model.User;
 import com.epam.spring.hometask.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,8 +16,10 @@ import javax.annotation.Nullable;
 /**
  * Created by Hanna_Tsykunova on 1/17/2018.
  */
+@Service
 public class UserServiceImpl implements UserService {
 
+  @Autowired
   private UserDAO userDAO;
 
   @Nullable

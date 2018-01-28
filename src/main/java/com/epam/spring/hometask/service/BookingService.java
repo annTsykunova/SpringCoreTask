@@ -56,6 +56,9 @@ public interface BookingService {
      */
     public @Nonnull Set<Ticket> getPurchasedTicketsForEvent(@Nonnull Event event, @Nonnull LocalDateTime dateTime) throws ServiceException;
 
+    public double getTicketPrice(@Nonnull Event event, @Nonnull LocalDateTime dateTime, @Nullable User user,
+        @Nonnull long seat) throws ServiceException;
+
 
 
 }
