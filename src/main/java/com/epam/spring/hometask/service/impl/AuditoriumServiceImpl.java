@@ -22,6 +22,16 @@ public class AuditoriumServiceImpl implements AuditoriumService {
   @Autowired
   private AuditoriumDAO auditoriumDAO;
 
+  @Override
+  public void remove(@Nonnull Auditorium object) throws ServiceException {
+
+  }
+
+  @Override
+  public Auditorium getById(@Nonnull Long id) throws ServiceException {
+    return null;
+  }
+
   @Nonnull
   @Override
   public Set<Auditorium> getAll() throws ServiceException {
@@ -40,6 +50,17 @@ public class AuditoriumServiceImpl implements AuditoriumService {
     Auditorium auditorium;
     try {
       auditorium = auditoriumDAO.getByName(name);
+    } catch (DAOException e) {
+      throw new ServiceException();
+    }
+    return auditorium;
+  }
+
+  @Override
+  public Auditorium save(@Nonnull Auditorium object) throws ServiceException {
+    Auditorium auditorium;
+    try {
+      auditorium = auditoriumDAO.save(object);
     } catch (DAOException e) {
       throw new ServiceException();
     }

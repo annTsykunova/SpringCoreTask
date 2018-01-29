@@ -1,5 +1,7 @@
 package com.epam.spring.hometask.ui.console;
 
+import com.epam.spring.hometask.configuration.ApplicationConfig;
+import com.epam.spring.hometask.dao.AuditoriumDAO;
 import com.epam.spring.hometask.exception.ServiceException;
 import com.epam.spring.hometask.model.Auditorium;
 import com.epam.spring.hometask.model.Event;
@@ -13,6 +15,7 @@ import com.epam.spring.hometask.service.UserService;
 import com.epam.spring.hometask.ui.console.state.MainState;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.time.LocalDateTime;
@@ -43,8 +46,8 @@ public class SpringHometaskConsoleUI {
     }
 
     private void initContext() {
-       context =
-           new ClassPathXmlApplicationContext("spring.xml");
+        context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
+       //context = new ClassPathXmlApplicationContext("spring.xml");
         //throw new IllegalStateException("Please, add Spring context initialization logic here");
     }
 
@@ -61,10 +64,15 @@ public class SpringHometaskConsoleUI {
     }
 
     private void fillInitialData() throws ServiceException {
-        UserService userService = context.getBean(UserService.class);
-        EventService eventService = context.getBean(EventService.class);
-        AuditoriumService auditoriumService = context.getBean(AuditoriumService.class);
-        BookingService bookingService = context.getBean(BookingService.class);
+        UserService userService = (UserService) context.getBean("userService");
+        EventService eventService = (EventService) context.getBean("eventService");
+        AuditoriumService auditoriumService = (AuditoriumService) context.getBean("auditoriumService");
+        BookingService bookingService = (BookingService) context.getBean("bookingService");
+
+        Auditorium auditoriumVelc = (Auditorium) context.getBean("auditoriumVelc");
+        Auditorium auditoriumOct = (Auditorium) context.getBean("auditoriumOct");
+        auditoriumService.save(auditoriumOct);
+        auditoriumService.save(auditoriumVelc);
         
         Auditorium auditorium = auditoriumService.getAll().iterator().next();
         if (auditorium == null) {

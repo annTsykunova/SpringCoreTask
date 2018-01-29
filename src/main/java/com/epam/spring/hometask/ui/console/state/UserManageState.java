@@ -16,7 +16,7 @@ import java.util.Locale;
 public class UserManageState extends AbstractDomainObjectManageState<User, UserService> {
 
     public UserManageState(ApplicationContext context) {
-        super(context.getBean(UserService.class));
+        super((UserService) context.getBean("userService"));
     }
 
     @Override

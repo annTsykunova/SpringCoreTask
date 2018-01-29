@@ -17,7 +17,7 @@ public class AuditoriumManageState extends AbstractState {
     private AuditoriumService auditoriumService;
 
     public AuditoriumManageState(ApplicationContext context) {
-        auditoriumService = context.getBean(AuditoriumService.class);
+        auditoriumService = (AuditoriumService) context.getBean("auditoriumService");
     }
 
     @Override

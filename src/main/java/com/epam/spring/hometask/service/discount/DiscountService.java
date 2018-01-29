@@ -5,6 +5,7 @@ import com.epam.spring.hometask.model.Event;
 import com.epam.spring.hometask.model.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -29,4 +30,5 @@ public interface DiscountService {
      */
     double getDiscount(@Nullable User user, @Nonnull Event event, @Nonnull LocalDateTime airDateTime, long numberOfTickets) throws ServiceException;
 
+    void setDiscountStrategies(List<DiscountStrategy> discountStrategies);
 }

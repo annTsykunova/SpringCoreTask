@@ -24,22 +24,22 @@ public class CounterAspect {
   private Map<Event, Long> counterEventTicketBooked = new HashMap<>();
 
   @Pointcut("execution(* getByName(..))")
-  private void execEventRepositoryGetByName() {
+  private void execEventDAOGetByName() {
   }
 
   @Pointcut("target(com.epam.spring.hometask.dao.EventDAO)")
-  private void withinEventRepository() {
+  private void withinEventDAO() {
   }
 
   @Pointcut("execution(* getTicketsPrice(..)) && args(event, ..)")
-  private void execTicketServiceGetTicketPrice(Event event) {
+  private void execBookingServiceGetTicketPrice(Event event) {
   }
 
-  @Pointcut("target(com.epam.spring.hometask.service.TicketService)")
-  private void withinTicketService() {
+  @Pointcut("target(com.epam.spring.hometask.service.BookingService)")
+  private void withinBookingService() {
   }
 
-  @Pointcut("execution(* *..TicketService.bookTicket(..))")
+  @Pointcut("execution(* *..BookingService.bookTicket(..))")
   private void execEventTicketBooked() {
   }
 
@@ -58,8 +58,8 @@ public class CounterAspect {
   }
 
   @AfterReturning(
-      pointcut = "execTicketServiceGetTicketPrice(event)", argNames = "jp,event")
-  public void afterTicketServiceGetTicketPrice(JoinPoint jp, Event event) {
+      pointcut = "execBookingServiceGetTicketPrice(event)", argNames = "jp,event")
+  public void afterBookingServiceGetTicketPrice(JoinPoint jp, Event event) {
 
     if (counterEventGetTicketPrice.containsKey(event)) {
       counterEventGetTicketPrice.put(event, counterEventGetTicketPrice.get(event) + 1);

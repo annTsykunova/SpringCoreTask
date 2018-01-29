@@ -28,9 +28,9 @@ public class BookingState extends AbstractState {
     private final EventService eventService;
 
     public BookingState(ApplicationContext context) {
-        this.bookingService = context.getBean(BookingService.class);
-        this.userService = context.getBean(UserService.class);
-        this.eventService = context.getBean(EventService.class);
+        this.bookingService = (BookingService) context.getBean("bookingService");
+        this.userService = (UserService) context.getBean("userService");
+        this.eventService = (EventService) context.getBean("eventService");
     }
 
     @Override

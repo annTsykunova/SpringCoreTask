@@ -4,6 +4,8 @@ import com.epam.spring.hometask.model.Event;
 import com.epam.spring.hometask.model.User;
 import com.epam.spring.hometask.service.discount.DiscountService;
 import com.epam.spring.hometask.service.discount.DiscountStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,18 +17,22 @@ import javax.annotation.Nullable;
 
 @Service
 public class DiscountServiceImpl implements DiscountService {
-  private List<DiscountStrategy> discountStrategyList;
+
+  private List<DiscountStrategy> discountStrategies;
 
   @Override
   public double getDiscount(@Nullable User user, @Nonnull Event event, @Nonnull LocalDateTime airDateTime, long numberOfTickets) {
     List<Double> discounts = new ArrayList<>();
-    for(DiscountStrategy discountStrategy : discountStrategyList){
+    for(DiscountStrategy discountStrategy : discountStrategies){
       discounts.add(discountStrategy.getDiscount(user, event,airDateTime,numberOfTickets));
     }
     return Collections.max(discounts);
   }
 
-  public void setDiscountStrategyList(List<DiscountStrategy> discountStrategyList) {
-    this.discountStrategyList = discountStrategyList;
+  @Autowired
+  @Override
+  public void setDiscountStrategies(List<DiscountStrategy> discountStrategies) {
+    this.discountStrategies = discountStrategies;
   }
+
 }

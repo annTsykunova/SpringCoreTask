@@ -19,8 +19,8 @@ public class EventManageState extends AbstractDomainObjectManageState<Event, Eve
     private AuditoriumService auditoriumService;
 
     public EventManageState(ApplicationContext context) {
-        super(context.getBean(EventService.class));
-        this.auditoriumService = context.getBean(AuditoriumService.class);
+        super((EventService) context.getBean("eventService"));
+        this.auditoriumService = (AuditoriumService) context.getBean("auditoriumService");
     }
 
     @Override

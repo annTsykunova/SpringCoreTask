@@ -16,6 +16,13 @@ public class EveryTenTicketStrategy implements DiscountStrategy {
     this.discountValue = discountValue;
   }
 
+  public EveryTenTicketStrategy() {
+  }
+
+  public EveryTenTicketStrategy(int discountValue) {
+    this.discountValue = discountValue;
+  }
+
   @Override
   public double getDiscount(User user, Event event, LocalDateTime airDateTime, long numberOfTickets) {
     if (numberOfTickets%10 == 9){

@@ -19,6 +19,13 @@ public class BirthdayStrategy implements DiscountStrategy {
     this.discountValue = discountValue;
   }
 
+  public BirthdayStrategy() {
+  }
+
+  public BirthdayStrategy(int discountValue) {
+    this.discountValue = discountValue;
+  }
+
   @Override
   public double getDiscount(User user, Event event, LocalDateTime airDateTime, long numberOfTickets) {
     final int days = 5;
@@ -37,4 +44,5 @@ public class BirthdayStrategy implements DiscountStrategy {
     }
     return 0;
   }
+
 }

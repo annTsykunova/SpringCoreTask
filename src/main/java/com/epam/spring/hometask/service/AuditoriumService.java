@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 /**
  * @author Yuriy_Tkach
  */
-public interface AuditoriumService {
+public interface AuditoriumService extends AbstractDomainObjectService<Auditorium> {
 
     /**
      * Getting all auditoriums from the system
@@ -31,4 +31,6 @@ public interface AuditoriumService {
      */
     public @Nullable Auditorium getByName(@Nonnull String name) throws ServiceException;
 
+    @Override
+    Auditorium save(@Nonnull Auditorium object) throws ServiceException;
 }
