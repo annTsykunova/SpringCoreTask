@@ -33,11 +33,14 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.sql.DataSource;
 
 /**
  * Created by Hanna_Tsykunova on 1/28/2018.
@@ -72,6 +75,23 @@ public class ApplicationConfig {
     return auditorium;
   }
 
+  @Bean(name = "dataSource")
+  public DataSource createDataSource() {
+
+    DriverManagerDataSource dataSource = new DriverManagerDataSource();
+
+    dataSource.setDriverClassName("oracle.jdbc.OracleDriver");
+    dataSource.setUrl("jdbc:oracle:thin:@localhost:1521:xe");
+    dataSource.setUsername("spring3");
+    dataSource.setPassword("spring3");
+
+    return dataSource;
+  }
+
+  @Bean
+  public JdbcTemplate jdbcTemplate() {
+    return new JdbcTemplate(createDataSource());
+  }
   @Bean(name = "auditoriumOct")
   public Auditorium auditoriumOct() {
     return createAuditorium("october");

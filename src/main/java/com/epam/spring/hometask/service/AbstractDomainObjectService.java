@@ -21,7 +21,7 @@ public interface AbstractDomainObjectService<T extends DomainObject> {
      *            Object to save
      * @return saved object with assigned id
      */
-    public T save(@Nonnull T object) throws ServiceException;
+    public void save(@Nonnull T object) throws ServiceException;
 
     /**
      * Removing object from storage

@@ -35,14 +35,13 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User save(@Nonnull User object) throws ServiceException {
+  public void save(@Nonnull User object) throws ServiceException {
     User user = null;
     try {
-      user = userDAO.save(object);
+      userDAO.save(object);
     } catch (DAOException e) {
       throw new ServiceException();
     }
-    return user;
   }
 
   @Override

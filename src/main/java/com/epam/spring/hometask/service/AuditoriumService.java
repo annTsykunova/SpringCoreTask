@@ -32,5 +32,5 @@ public interface AuditoriumService extends AbstractDomainObjectService<Auditoriu
     public @Nullable Auditorium getByName(@Nonnull String name) throws ServiceException;
 
     @Override
-    Auditorium save(@Nonnull Auditorium object) throws ServiceException;
+    void save(@Nonnull Auditorium object) throws ServiceException;
 }

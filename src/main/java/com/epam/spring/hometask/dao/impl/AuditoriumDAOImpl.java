@@ -4,11 +4,20 @@ import com.epam.spring.hometask.dao.AuditoriumDAO;
 import com.epam.spring.hometask.exception.DAOException;
 import com.epam.spring.hometask.model.Auditorium;
 import com.epam.spring.hometask.utils.GeneratorId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.Types;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
+import javax.sql.DataSource;
 
 /**
  * Created by Hanna_Tsykunova on 1/17/2018.
@@ -16,44 +25,57 @@ import java.util.Map;
 @Repository
 public class AuditoriumDAOImpl implements AuditoriumDAO {
 
-  private Map<Long,Auditorium> auditoriums = new HashMap<>();
+  private static final String GET_BY_NAME = "select * from auditoriums where name = ?";
+  private static final String GET_BY_ID = "select * from auditoriums where id = ?";
+  private static final String INSERT_QUERY = "insert into auditoriums values(?, ?, ?)";
+  private static final String DELETE_QUERY = "delete from auditoriums";
+  private static final String GET_ALL = "select * from auditoriums";
+
+
+  @Autowired
+  JdbcTemplate jdbcTemplate;
 
   @Override
   public Auditorium getByName(String name) throws DAOException {
-    for (Auditorium auditorium: auditoriums.values()) {
-      if (auditorium.getName().equals(name)) {
-        return auditorium;
-      }
-    }
-    return null;
-  }
-
-  @Override
-  public Auditorium getById(Long key) throws DAOException {
-    return auditoriums.get(key);
-  }
-
-  @Override
-  public Auditorium save(Auditorium auditorium) throws DAOException {
-    Long id = GeneratorId.generateId();
-    Auditorium savedAuditorium = auditoriums.put(id, auditorium);
-    if (savedAuditorium != null){
-      return savedAuditorium;
-    }
+    Auditorium auditorium = (Auditorium) jdbcTemplate.queryForObject(
+        GET_BY_NAME, new Object[] { name },
+        new BeanPropertyRowMapper(Auditorium.class));
     return auditorium;
   }
 
   @Override
+  public Auditorium getById(Long key) throws DAOException {
+    Auditorium auditorium = (Auditorium) jdbcTemplate.queryForObject(
+        GET_BY_ID, new Object[] { key },
+        new BeanPropertyRowMapper(Auditorium.class));
+    return auditorium;
+  }
+
+  @Override
+  public void save(Auditorium auditorium) throws DAOException {
+    Object[] values = {auditorium.getName(), auditorium.getAllSeats().size(), auditorium.getVipSeats().size()};
+    int[] types = {Types.VARCHAR, Types.INTEGER, Types.INTEGER};
+    jdbcTemplate.update(INSERT_QUERY, values, types);
+  }
+
+  @Override
   public void delete(Auditorium auditorium) throws DAOException {
-    auditoriums.remove(auditorium);
+    jdbcTemplate.update(con -> {
+      PreparedStatement statement = con.prepareStatement(DELETE_QUERY);
+      statement.setLong(1, auditorium.getId());
+      return statement;
+    });
   }
 
   @Override
   public Collection<Auditorium> getAll() throws DAOException {
-    return auditoriums.values();
-  }
-
-  public void setAuditoriums(Map<Long, Auditorium> auditoriums) {
-    this.auditoriums = auditoriums;
+    return new HashSet<Auditorium>(jdbcTemplate.query(GET_ALL, (rs, rowNum) -> {
+      Auditorium auditorium = new Auditorium();
+      auditorium.setId(rs.getLong(1));
+      auditorium.setName(rs.getString(2));
+      auditorium.setNumberOfSeats(Long.parseLong(rs.getString(3)));
+      auditorium.setVipSeats(LongStream.rangeClosed(1, rs.getLong(4)).boxed().collect(Collectors.toSet()));
+      return auditorium;
+    }));
   }
 }

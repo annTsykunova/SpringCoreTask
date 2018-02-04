@@ -12,7 +12,7 @@ import java.util.List;
 public interface AbstractDAO<T, PK extends Serializable> {
   T getById(PK key) throws DAOException;
 
-  T save(T object) throws DAOException;
+  void save(T object) throws DAOException;
 
   void delete(T object) throws DAOException;
 

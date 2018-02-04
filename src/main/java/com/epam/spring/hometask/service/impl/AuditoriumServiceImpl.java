@@ -57,14 +57,12 @@ public class AuditoriumServiceImpl implements AuditoriumService {
   }
 
   @Override
-  public Auditorium save(@Nonnull Auditorium object) throws ServiceException {
-    Auditorium auditorium;
+  public void save(@Nonnull Auditorium object) throws ServiceException {
     try {
-      auditorium = auditoriumDAO.save(object);
+      auditoriumDAO.save(object);
     } catch (DAOException e) {
       throw new ServiceException();
     }
-    return auditorium;
   }
 
   public void setAuditoriumDAO(AuditoriumDAO auditoriumDAO) {

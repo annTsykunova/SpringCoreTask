@@ -29,14 +29,10 @@ public class TicketDAOImpl implements TicketDAO {
   }
 
   @Override
-  public Ticket save(Ticket ticket) throws DAOException {
+  public void save(Ticket ticket) throws DAOException {
     Long id = GeneratorId.generateId();
     ticket.setId(id);
-    boolean flag = tickets.add(ticket);
-    if (flag) {
-      return ticket;
-    }
-    return null;
+    tickets.add(ticket);
   }
 
   @Override

@@ -34,14 +34,13 @@ public class EventServiceImpl implements EventService {
   }
 
   @Override
-  public Event save(@Nonnull Event object) throws ServiceException {
+  public void save(@Nonnull Event object) throws ServiceException {
     Event event;
     try {
-      event = eventDAO.save(object);
+      eventDAO.save(object);
     } catch (DAOException e) {
       throw new ServiceException();
     }
-    return event;
   }
 
   @Override
