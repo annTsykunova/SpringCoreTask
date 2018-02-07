@@ -45,8 +45,13 @@ public class EventManageState extends AbstractDomainObjectManageState<Event, Eve
         event.setName(name);
         event.setRating(rating);
         event.setBasePrice(basePrice);
-
-        return event;
+        Event savedEvent = null;
+        try {
+            savedEvent = service.save(event);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+        return savedEvent;
     }
 
     private EventRating readEventRating() {
@@ -90,7 +95,7 @@ public class EventManageState extends AbstractDomainObjectManageState<Event, Eve
 
         Event event = null;
         try {
-            event = service.getById(Long.valueOf(id));
+            event = service.getById(Integer.valueOf(id));
             if (event == null) {
                 System.out.println("Not found (searched for " + id + ")");
             } else {

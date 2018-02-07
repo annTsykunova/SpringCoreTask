@@ -11,6 +11,6 @@ import java.util.Set;
 /**
  * Created by Hanna_Tsykunova on 1/17/2018.
  */
-public interface TicketDAO extends AbstractDAO<Ticket,Long> {
+public interface TicketDAO extends AbstractDAO<Ticket,Integer> {
 
 }

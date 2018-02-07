@@ -78,7 +78,14 @@ public class UserManageState extends AbstractDomainObjectManageState<User, UserS
         user.setLastName(lastName);
         user.setBirthDate(birthDate);
 
-        return user;
+        User savedUser = null;
+        try {
+            savedUser = service.save(user);
+        } catch (ServiceException e) {
+            e.printStackTrace();
+        }
+
+        return savedUser;
     }
 
 }

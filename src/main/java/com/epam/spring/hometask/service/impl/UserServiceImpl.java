@@ -35,13 +35,14 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void save(@Nonnull User object) throws ServiceException {
+  public User save(@Nonnull User object) throws ServiceException {
     User user = null;
     try {
-      userDAO.save(object);
+      user = userDAO.save(object);
     } catch (DAOException e) {
       throw new ServiceException();
     }
+    return user;
   }
 
   @Override
@@ -54,7 +55,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User getById(@Nonnull Long id) throws ServiceException {
+  public User getById(@Nonnull Integer id) throws ServiceException {
     User user = null;
     try {
       user = userDAO.getById(id);

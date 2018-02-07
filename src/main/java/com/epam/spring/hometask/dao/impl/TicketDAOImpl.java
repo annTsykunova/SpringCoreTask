@@ -19,7 +19,7 @@ public class TicketDAOImpl implements TicketDAO {
   private Set<Ticket> tickets = new HashSet<>();
 
   @Override
-  public Ticket getById(Long key) throws DAOException {
+  public Ticket getById(Integer key) throws DAOException {
     for (Ticket ticket: tickets) {
       if (ticket.getId() == key) {
         return ticket;
@@ -29,10 +29,14 @@ public class TicketDAOImpl implements TicketDAO {
   }
 
   @Override
-  public void save(Ticket ticket) throws DAOException {
-    Long id = GeneratorId.generateId();
+  public Ticket save(Ticket ticket) throws DAOException {
+    Integer id = GeneratorId.generateId();
     ticket.setId(id);
-    tickets.add(ticket);
+    boolean flag = tickets.add(ticket);
+    if (flag) {
+      return ticket;
+    }
+    return null;
   }
 
   @Override

@@ -6,6 +6,6 @@ import com.epam.spring.hometask.model.Auditorium;
 /**
  * Created by Hanna_Tsykunova on 1/17/2018.
  */
-public interface AuditoriumDAO extends AbstractDAO<Auditorium,Long> {
+public interface AuditoriumDAO extends AbstractDAO<Auditorium,Integer> {
   public Auditorium getByName(String name) throws DAOException;
 }

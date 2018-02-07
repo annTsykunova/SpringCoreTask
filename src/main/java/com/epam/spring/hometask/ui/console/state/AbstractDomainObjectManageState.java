@@ -73,7 +73,7 @@ public abstract class AbstractDomainObjectManageState<T extends DomainObject, S 
     
     private void removeObject() throws ServiceException {
         int id = readIntInput("Input id: ");
-        T obj = service.getById(Long.valueOf(id));
+        T obj = service.getById(Integer.valueOf(id));
         if (obj == null) {
             System.out.println("Not found (searched for " + id + ")");
         } else {
@@ -85,7 +85,7 @@ public abstract class AbstractDomainObjectManageState<T extends DomainObject, S 
 
     private void findObjectById() throws ServiceException {
         int id = readIntInput("Input id: ");
-        T obj = service.getById(Long.valueOf(id));
+        T obj = service.getById(Integer.valueOf(id));
         if (obj == null) {
             System.out.println("Not found (searched for " + id + ")");
         } else {

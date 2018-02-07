@@ -28,8 +28,14 @@ public class AuditoriumServiceImpl implements AuditoriumService {
   }
 
   @Override
-  public Auditorium getById(@Nonnull Long id) throws ServiceException {
-    return null;
+  public Auditorium getById(@Nonnull Integer id) throws ServiceException {
+    Auditorium auditorium;
+    try {
+      auditorium = auditoriumDAO.getById(id);
+    } catch (DAOException e) {
+      throw new ServiceException();
+    }
+    return auditorium;
   }
 
   @Nonnull
@@ -57,12 +63,14 @@ public class AuditoriumServiceImpl implements AuditoriumService {
   }
 
   @Override
-  public void save(@Nonnull Auditorium object) throws ServiceException {
+  public Auditorium save(@Nonnull Auditorium object) throws ServiceException {
+    Auditorium auditorium = null;
     try {
-      auditoriumDAO.save(object);
+      auditorium = auditoriumDAO.save(object);
     } catch (DAOException e) {
       throw new ServiceException();
     }
+    return auditorium;
   }
 
   public void setAuditoriumDAO(AuditoriumDAO auditoriumDAO) {

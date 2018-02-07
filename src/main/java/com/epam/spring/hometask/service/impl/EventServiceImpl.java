@@ -34,13 +34,14 @@ public class EventServiceImpl implements EventService {
   }
 
   @Override
-  public void save(@Nonnull Event object) throws ServiceException {
+  public Event save(@Nonnull Event object) throws ServiceException {
     Event event;
     try {
-      eventDAO.save(object);
+      event = eventDAO.save(object);
     } catch (DAOException e) {
       throw new ServiceException();
     }
+    return event;
   }
 
   @Override
@@ -53,7 +54,7 @@ public class EventServiceImpl implements EventService {
   }
 
   @Override
-  public Event getById(@Nonnull Long id) throws ServiceException {
+  public Event getById(@Nonnull Integer id) throws ServiceException {
     Event event;
     try {
       event = eventDAO.getById(id);

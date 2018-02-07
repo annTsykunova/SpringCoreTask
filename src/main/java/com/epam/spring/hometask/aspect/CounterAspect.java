@@ -1,5 +1,8 @@
 package com.epam.spring.hometask.aspect;
 
+import com.epam.spring.hometask.dao.BookingCounterDAO;
+import com.epam.spring.hometask.dao.CallCounterDAO;
+import com.epam.spring.hometask.dao.PriceCounterDAO;
 import com.epam.spring.hometask.model.Event;
 import com.epam.spring.hometask.model.Ticket;
 import org.aspectj.lang.JoinPoint;
@@ -19,9 +22,14 @@ import java.util.Map;
 @Aspect
 public class CounterAspect {
 
-  private Map<Event, Long> counterEventGetByName = new HashMap<>();
-  private Map<Event, Long> counterEventGetTicketPrice = new HashMap<>();
-  private Map<Event, Long> counterEventTicketBooked = new HashMap<>();
+  @Autowired
+  private BookingCounterDAO bookingCounterDao;
+
+  @Autowired
+  private CallCounterDAO callCounterDao;
+
+  @Autowired
+  private PriceCounterDAO priceCounterDao;
 
   @Pointcut("execution(* getByName(..))")
   private void execEventDAOGetByName() {
@@ -47,11 +55,11 @@ public class CounterAspect {
       pointcut = "execEventDAOGetByName() && withinEventDAO()",
       returning = "event")
   public void afterExecEventRepositoryGetByName(JoinPoint jp, Event event) {
-
-    if (counterEventGetByName.containsKey(event)) {
-      counterEventGetByName.put(event, counterEventGetByName.get(event) + 1);
+    String eventName = event.getName();
+    if (callCounterDao.getAll().containsKey(event)) {
+      callCounterDao.put(eventName, callCounterDao.get(eventName) + 1);
     } else {
-      counterEventGetByName.put(event, 1L);
+      callCounterDao.put(eventName, 1);
     }
 
     System.out.println("afterEventGetByName from " + jp.getTarget().toString() + ", event: " + event);
@@ -60,11 +68,11 @@ public class CounterAspect {
   @AfterReturning(
       pointcut = "execBookingServiceGetTicketPrice(event)", argNames = "jp,event")
   public void afterBookingServiceGetTicketPrice(JoinPoint jp, Event event) {
-
-    if (counterEventGetTicketPrice.containsKey(event)) {
-      counterEventGetTicketPrice.put(event, counterEventGetTicketPrice.get(event) + 1);
+    String eventName = event.getName();
+    if (priceCounterDao.getAll().containsKey(eventName)) {
+      priceCounterDao.put(eventName, priceCounterDao.get(eventName) + 1);
     } else {
-      counterEventGetTicketPrice.put(event, 1L);
+      priceCounterDao.put(eventName, 1);
     }
 
     System.out.println("afterEventGetTicketPrice  from " + jp.getTarget().toString() + ", event: " + event);
@@ -76,26 +84,14 @@ public class CounterAspect {
   public void afterEventTicketBooked(JoinPoint jp, Ticket ticket) {
 
     Event event = ticket.getEvent();
-
-    if (counterEventTicketBooked.containsKey(event)) {
-      counterEventTicketBooked.put(event, counterEventTicketBooked.get(event) + 1);
+    String eventName = event.getName();
+    if (bookingCounterDao.getAll().containsKey(eventName)) {
+      bookingCounterDao.put(eventName, bookingCounterDao.get(eventName) + 1);
     } else {
-      counterEventTicketBooked.put(event, 1L);
+      bookingCounterDao.put(eventName, 1);
     }
 
     System.out.println("afterEventTicketBooked  from " + jp.getTarget().toString() + ", event: " + event);
-  }
-
-  public Map<Event, Long> getCounterEventGetByName() {
-    return counterEventGetByName;
-  }
-
-  public Map<Event, Long> getCounterEventGetTicketPrice() {
-    return counterEventGetTicketPrice;
-  }
-
-  public Map<Event, Long> getCounterEventTicketBooked() {
-    return counterEventTicketBooked;
   }
 
 }

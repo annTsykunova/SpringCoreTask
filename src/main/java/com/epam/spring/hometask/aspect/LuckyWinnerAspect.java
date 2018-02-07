@@ -8,6 +8,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 
 import java.lang.reflect.Method;
+import java.util.Random;
 
 /**
  * Created by Hanna_Tsykunova on 1/28/2018.
@@ -22,15 +23,8 @@ public class LuckyWinnerAspect {
   @Around(value = "accessEventTicketBooking() && args(user, ticket)",
       argNames = "joinPoint,user,ticket")
   public void checkLuckyUser(ProceedingJoinPoint joinPoint, User user, Ticket ticket) {
-    Object targetClass = joinPoint.getTarget();
-    Class<?> bookingServiceClass = targetClass.getClass();
-
     try {
-      Method method = bookingServiceClass.getMethod("checkLucky", User.class);
-      method.setAccessible(true);
-      boolean isUserLucky = (boolean) method.invoke(targetClass, user);
-
-      if (isUserLucky) {
+      if (isUserLucky()) {
         // set ticket price to 0
         ticket.setPrice(0D);
       }
@@ -39,5 +33,10 @@ public class LuckyWinnerAspect {
     } catch (Throwable throwable) {
       System.err.println("Exception during checkLucky user: " + throwable.getMessage());
     }
+  }
+
+  private boolean isUserLucky(){
+    Random rand = new Random();
+    return 1 == rand.nextInt(1000);
   }
 }

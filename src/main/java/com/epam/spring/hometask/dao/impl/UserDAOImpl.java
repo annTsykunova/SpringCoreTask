@@ -43,7 +43,7 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
-  public User getById(Long key) throws DAOException {
+  public User getById(Integer key) throws DAOException {
     User user = (User) jdbcTemplate.queryForObject(
         GET_BY_ID, new Object[] { key },
         new BeanPropertyRowMapper(User.class));
@@ -51,10 +51,12 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
-  public void save(User user) throws DAOException {
+  public User save(User user) throws DAOException {
+    Integer id = GeneratorId.generateId();
     Object[] values = {user.getFirstName(), user.getLastName(), user.getEmail(), user.getBirthDate()};
     int[] types = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.DATE};
     jdbcTemplate.update(INSERT_QUERY, values, types);
+    return getById(id);
   }
 
   @Override
@@ -70,7 +72,7 @@ public class UserDAOImpl implements UserDAO {
   public Collection<User> getAll() throws DAOException {
     return new HashSet<User>(jdbcTemplate.query(GET_ALL, (rs, rowNum) -> {
       User user = new User();
-      user.setId(rs.getLong(1));
+      user.setId(rs.getInt(1));
       user.setFirstName(rs.getString(2));
       user.setLastName(rs.getString(3));
       user.setEmail(rs.getString(4));

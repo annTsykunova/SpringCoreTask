@@ -196,7 +196,7 @@ public class BookingState extends AbstractState {
     private <T extends DomainObject> T selectDomainObject(AbstractDomainObjectService<T> service, Function<T, String> displayFunction) throws ServiceException {
         if (!service.getAll().isEmpty()) {
             service.getAll().forEach(obj -> System.out.println("[" + obj.getId() + "] " + displayFunction.apply(obj)));
-            long id = readIntInput("Input id (-1 for nothing): ");
+            int id = readIntInput("Input id (-1 for nothing): ");
             return service.getById(id);
         } else {
             return null;

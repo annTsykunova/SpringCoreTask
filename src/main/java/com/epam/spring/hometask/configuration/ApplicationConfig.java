@@ -128,46 +128,6 @@ public class ApplicationConfig {
     return discountService;
   }
 
-  @Bean(name = "eventDAO")
-  public EventDAO getEventDAO() {
-    return new EventDAOImpl();
-  }
-
-  @Bean(name = "ticketDAO")
-  public TicketDAO getTicketDAO() {
-    return new TicketDAOImpl();
-  }
-
-  @Bean(name = "userDAO")
-  public UserDAO getUserDAO() {
-    return new UserDAOImpl();
-  }
-
-  @Bean(name = "auditoriumDAO")
-  public AuditoriumDAO getAuditoriumDAO() {
-    return new AuditoriumDAOImpl();
-  }
-
-  @Bean(name = "eventService")
-  public EventService getEventService() {
-    return new EventServiceImpl();
-  }
-
-  @Bean(name = "userService")
-  public UserService getUserService() {
-    return new UserServiceImpl();
-  }
-
-  @Bean(name = "auditoriumService")
-  public AuditoriumService getAuditoriumService() {
-    return new AuditoriumServiceImpl();
-  }
-
-  @Bean(name = "bookingService")
-  public BookingService getBookingService() {
-    return new BookingServiceImpl();
-  }
-
   @Bean(name = "counterAspect")
   public CounterAspect counterAspect() {
     return new CounterAspect();
