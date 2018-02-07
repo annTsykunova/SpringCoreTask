@@ -74,16 +74,16 @@ public class BookingServiceImpl implements BookingService {
     try {
       Set<Long> seats;
       Collection<User> users = userDAO.getAll();
+      Ticket savedTicket;
       for (Ticket ticket: tickets) {
-        if (users.contains(ticket.getUser())){
-          User user = ticket.getUser();
-          user.getTickets().add(ticket);
-          userDAO.save(user);
-        }
-
         double price = getTicketPrice(ticket.getEvent(),ticket.getDateTime(),ticket.getUser(),ticket.getSeat());
         ticket.setPrice(price);
-        ticketDAO.save(ticket);
+        savedTicket = ticketDAO.save(ticket);
+        if (users.contains(savedTicket.getUser())){
+          User user = savedTicket.getUser();
+          user.getTickets().add(savedTicket);
+          userDAO.save(user);
+        }
       }
 
     } catch (DAOException e) {

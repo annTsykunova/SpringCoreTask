@@ -13,6 +13,7 @@ import com.epam.spring.hometask.service.BookingService;
 import com.epam.spring.hometask.service.EventService;
 import com.epam.spring.hometask.service.UserService;
 import com.epam.spring.hometask.ui.console.state.MainState;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -34,6 +35,9 @@ import java.util.Set;
 public class SpringHometaskConsoleUI {
 
     private ApplicationContext context;
+
+    @Autowired
+    UserService userService;
 
     public static void main(String[] args) {
         SpringHometaskConsoleUI ui = new SpringHometaskConsoleUI();
@@ -64,15 +68,15 @@ public class SpringHometaskConsoleUI {
     }
 
     private void fillInitialData() throws ServiceException {
-        UserService userService = (UserService) context.getBean("userService");
-        EventService eventService = (EventService) context.getBean("eventService");
-        AuditoriumService auditoriumService = (AuditoriumService) context.getBean("auditoriumService");
-        BookingService bookingService = (BookingService) context.getBean("bookingService");
+        UserService userService = context.getBean(UserService.class);
+        EventService eventService =  context.getBean(EventService.class);
+        AuditoriumService auditoriumService =  context.getBean(AuditoriumService.class);
+        BookingService bookingService =  context.getBean(BookingService.class);
 
         Auditorium auditoriumVelc = (Auditorium) context.getBean("auditoriumVelc");
         Auditorium auditoriumOct = (Auditorium) context.getBean("auditoriumOct");
-        auditoriumService.save(auditoriumOct);
-        auditoriumService.save(auditoriumVelc);
+       // auditoriumService.save(auditoriumOct);
+        //auditoriumService.save(auditoriumVelc);
         
         Auditorium auditorium = auditoriumService.getAll().iterator().next();
         if (auditorium == null) {

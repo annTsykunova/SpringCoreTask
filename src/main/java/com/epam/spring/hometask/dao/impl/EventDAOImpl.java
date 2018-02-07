@@ -40,9 +40,14 @@ public class EventDAOImpl implements EventDAO {
 
   @Override
   public Event getById(Integer key) throws DAOException {
-    Event event = (Event) jdbcTemplate.queryForObject(
-        GET_BY_ID, new Object[] { key },
-        new BeanPropertyRowMapper(Event.class));
+    Event event = new Event();
+    jdbcTemplate.query(GET_BY_ID, new Object[] {key},(rs, rowNum) -> {
+      event.setId(rs.getInt(1));
+      event.setName(rs.getString(2));
+      event.setBasePrice(rs.getDouble(3));
+      event.setRating(EventRating.valueOf(rs.getString(4)));
+      return event;
+    });
     return event;
   }
 
@@ -71,15 +76,21 @@ public class EventDAOImpl implements EventDAO {
       event.setId(rs.getInt(1));
       event.setName(rs.getString(2));
       event.setBasePrice(rs.getDouble(3));
+      event.setRating(EventRating.valueOf(rs.getString(4)));
       return event;
     }));
   }
 
   @Override
   public Event getByName(String name) throws DAOException {
-    Event event = (Event) jdbcTemplate.queryForObject(
-        GET_BY_NAME, new Object[] { name },
-        new BeanPropertyRowMapper(Event.class));
+    Event event = new Event();
+    jdbcTemplate.query(GET_BY_NAME, new Object[] {name} , (rs, rowNum) -> {
+      event.setId(rs.getInt(1));
+      event.setName(rs.getString(2));
+      event.setBasePrice(rs.getDouble(3));
+      event.setRating(EventRating.valueOf(rs.getString(4)));
+      return event;
+    });
     return event;
   }
 

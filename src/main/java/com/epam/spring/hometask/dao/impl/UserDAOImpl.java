@@ -9,8 +9,10 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Types;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,7 +29,7 @@ public class UserDAOImpl implements UserDAO {
 
   private static final String GET_BY_EMAIL = "select * from users where email = ?";
   private static final String GET_BY_ID = "select * from users where id = ?";
-  private static final String INSERT_QUERY = "insert into users values(?, ?, ?, ?)";
+  private static final String INSERT_QUERY = "insert into users values(?, ?, ?, ?, ?)";
   private static final String DELETE_QUERY = "delete from users";
   private static final String GET_ALL = "select * from users";
 
@@ -36,25 +38,42 @@ public class UserDAOImpl implements UserDAO {
 
   @Override
   public User getByEmail(String email) throws DAOException {
-    User user = (User) jdbcTemplate.queryForObject(
-        GET_BY_EMAIL, new Object[] { email },
-        new BeanPropertyRowMapper(User.class));
-    return user;
+    jdbcTemplate.query(GET_BY_EMAIL, (rs, rowNum) -> {
+      User user = new User();
+      user.setId(rs.getInt(1));
+      user.setFirstName(rs.getString(2));
+      user.setLastName(rs.getString(3));
+      user.setEmail(rs.getString(4));
+      if (rs.getDate(5) != null) {
+        user.setBirthDate(LocalDateTime.from(rs.getDate(5).toLocalDate()));
+      }
+      return user;
+    }, email);
+    return null;
   }
 
   @Override
   public User getById(Integer key) throws DAOException {
-    User user = (User) jdbcTemplate.queryForObject(
-        GET_BY_ID, new Object[] { key },
-        new BeanPropertyRowMapper(User.class));
-    return user;
+    jdbcTemplate.query(GET_BY_ID, (rs, rowNum) -> {
+      User user = new User();
+      user.setId(rs.getInt(1));
+      user.setFirstName(rs.getString(2));
+      user.setLastName(rs.getString(3));
+      user.setEmail(rs.getString(4));
+      if (rs.getDate(5) != null) {
+        user.setBirthDate((rs.getDate(5).toLocalDate().atStartOfDay()));
+      }
+      return user;
+    }, key);
+    return null;
   }
 
   @Override
   public User save(User user) throws DAOException {
     Integer id = GeneratorId.generateId();
-    Object[] values = {user.getFirstName(), user.getLastName(), user.getEmail(), user.getBirthDate()};
-    int[] types = {Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.DATE};
+    Date dateBirth =  Date.valueOf(user.getBirthDate().toLocalDate());
+    Object[] values = {id, user.getFirstName(), user.getLastName(), user.getEmail(), dateBirth};
+    int[] types = {Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.DATE};
     jdbcTemplate.update(INSERT_QUERY, values, types);
     return getById(id);
   }
@@ -76,6 +95,9 @@ public class UserDAOImpl implements UserDAO {
       user.setFirstName(rs.getString(2));
       user.setLastName(rs.getString(3));
       user.setEmail(rs.getString(4));
+      if (rs.getDate(5) != null) {
+        user.setBirthDate(rs.getDate(5).toLocalDate().atStartOfDay());
+      }
       return user;
     }));
   }

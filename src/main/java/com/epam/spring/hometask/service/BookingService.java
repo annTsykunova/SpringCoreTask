@@ -4,6 +4,7 @@ import com.epam.spring.hometask.exception.ServiceException;
 import com.epam.spring.hometask.model.Event;
 import com.epam.spring.hometask.model.Ticket;
 import com.epam.spring.hometask.model.User;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -13,6 +14,7 @@ import javax.annotation.Nullable;
 /**
  * @author Yuriy_Tkach
  */
+@Service
 public interface BookingService {
 
     /**
@@ -58,7 +60,6 @@ public interface BookingService {
 
     public double getTicketPrice(@Nonnull Event event, @Nonnull LocalDateTime dateTime, @Nullable User user,
         @Nonnull long seat) throws ServiceException;
-
 
 
 }

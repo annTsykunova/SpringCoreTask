@@ -3,6 +3,7 @@ package com.epam.spring.hometask.service;
 
 import com.epam.spring.hometask.exception.ServiceException;
 import com.epam.spring.hometask.model.Auditorium;
+import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import javax.annotation.Nonnull;
@@ -11,6 +12,7 @@ import javax.annotation.Nullable;
 /**
  * @author Yuriy_Tkach
  */
+@Service
 public interface AuditoriumService extends AbstractDomainObjectService<Auditorium> {
 
     /**

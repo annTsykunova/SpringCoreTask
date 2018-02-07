@@ -3,28 +3,13 @@ package com.epam.spring.hometask.configuration;
 import com.epam.spring.hometask.aspect.CounterAspect;
 import com.epam.spring.hometask.aspect.DiscountAspect;
 import com.epam.spring.hometask.aspect.LuckyWinnerAspect;
-import com.epam.spring.hometask.dao.AuditoriumDAO;
-import com.epam.spring.hometask.dao.EventDAO;
-import com.epam.spring.hometask.dao.TicketDAO;
-import com.epam.spring.hometask.dao.UserDAO;
-import com.epam.spring.hometask.dao.impl.AuditoriumDAOImpl;
-import com.epam.spring.hometask.dao.impl.EventDAOImpl;
-import com.epam.spring.hometask.dao.impl.TicketDAOImpl;
-import com.epam.spring.hometask.dao.impl.UserDAOImpl;
+
 import com.epam.spring.hometask.model.Auditorium;
-import com.epam.spring.hometask.service.AuditoriumService;
-import com.epam.spring.hometask.service.BookingService;
-import com.epam.spring.hometask.service.EventService;
-import com.epam.spring.hometask.service.UserService;
 import com.epam.spring.hometask.service.discount.BirthdayStrategy;
 import com.epam.spring.hometask.service.discount.DiscountService;
 import com.epam.spring.hometask.service.discount.DiscountServiceImpl;
 import com.epam.spring.hometask.service.discount.DiscountStrategy;
 import com.epam.spring.hometask.service.discount.EveryTenTicketStrategy;
-import com.epam.spring.hometask.service.impl.AuditoriumServiceImpl;
-import com.epam.spring.hometask.service.impl.BookingServiceImpl;
-import com.epam.spring.hometask.service.impl.EventServiceImpl;
-import com.epam.spring.hometask.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -51,7 +36,8 @@ import javax.sql.DataSource;
 @PropertySource({
     "classpath:discountValue.properties",
     "classpath:october-cinema.properties",
-    "classpath:velcom-cinema.properties"})
+    "classpath:velcom-cinema.properties",
+    "classpath:database.properties"})
 public class ApplicationConfig {
 
   @Autowired
@@ -78,12 +64,17 @@ public class ApplicationConfig {
   @Bean(name = "dataSource")
   public DataSource createDataSource() {
 
+    String driver = env.getProperty("db.driver");
+    String url = env.getProperty("db.url");
+    String user = env.getProperty("db.user");
+    String pass  = env.getProperty("db.password");
+
     DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
-    dataSource.setDriverClassName("oracle.jdbc.OracleDriver");
-    dataSource.setUrl("jdbc:oracle:thin:@localhost:1521:xe");
-    dataSource.setUsername("spring3");
-    dataSource.setPassword("spring3");
+    dataSource.setDriverClassName(driver);
+    dataSource.setUrl(url);
+    dataSource.setUsername(user);
+    dataSource.setPassword(pass);
 
     return dataSource;
   }

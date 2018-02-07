@@ -37,17 +37,27 @@ public class AuditoriumDAOImpl implements AuditoriumDAO {
 
   @Override
   public Auditorium getByName(String name) throws DAOException {
-    Auditorium auditorium = (Auditorium) jdbcTemplate.queryForObject(
-        GET_BY_NAME, new Object[] { name },
-        new BeanPropertyRowMapper(Auditorium.class));
-    return auditorium;
+    Auditorium auditorium = new Auditorium();
+    jdbcTemplate.query(GET_BY_NAME, new Object[] {name}, (rs, rowNum) -> {
+      auditorium.setId(rs.getInt(1));
+      auditorium.setName(rs.getString(2));
+      auditorium.setNumberOfSeats(Long.parseLong(rs.getString(3)));
+      auditorium.setVipSeats(LongStream.rangeClosed(1, rs.getLong(4)).boxed().collect(Collectors.toSet()));
+      return auditorium;
+    });
+   return auditorium;
   }
 
   @Override
   public Auditorium getById(Integer key) throws DAOException {
-    Auditorium auditorium = (Auditorium) jdbcTemplate.queryForObject(
-        GET_BY_ID, new Object[] { key },
-        new BeanPropertyRowMapper(Auditorium.class));
+    Auditorium auditorium = new Auditorium();
+    jdbcTemplate.query(GET_BY_ID, new Object[] {key},(rs, rowNum) -> {
+      auditorium.setId(rs.getInt(1));
+      auditorium.setName(rs.getString(2));
+      auditorium.setNumberOfSeats(Long.parseLong(rs.getString(3)));
+      auditorium.setVipSeats(LongStream.rangeClosed(1, rs.getLong(4)).boxed().collect(Collectors.toSet()));
+      return auditorium;
+    });
     return auditorium;
   }
 
