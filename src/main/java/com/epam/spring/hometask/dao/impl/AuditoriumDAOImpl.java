@@ -67,7 +67,8 @@ public class AuditoriumDAOImpl implements AuditoriumDAO {
     Object[] values = {id,auditorium.getName(), auditorium.getAllSeats().size(), auditorium.getVipSeats().size()};
     int[] types = {Types.INTEGER, Types.VARCHAR, Types.INTEGER, Types.INTEGER};
     jdbcTemplate.update(INSERT_QUERY, values, types);
-    return getById(id);
+    auditorium.setId(id);
+    return auditorium;
   }
 
   @Override

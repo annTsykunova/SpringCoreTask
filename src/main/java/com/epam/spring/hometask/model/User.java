@@ -21,6 +21,7 @@ public class User extends DomainObject {
         return birthDate;
     }
 
+
     public void setBirthDate(LocalDateTime birthDate) {
         this.birthDate = birthDate;
     }

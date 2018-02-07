@@ -75,7 +75,8 @@ public class UserDAOImpl implements UserDAO {
     Object[] values = {id, user.getFirstName(), user.getLastName(), user.getEmail(), dateBirth};
     int[] types = {Types.INTEGER, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.DATE};
     jdbcTemplate.update(INSERT_QUERY, values, types);
-    return getById(id);
+    user.setId(id);
+    return user;
   }
 
   @Override

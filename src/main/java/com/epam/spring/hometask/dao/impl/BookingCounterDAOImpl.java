@@ -4,9 +4,11 @@ import com.epam.spring.hometask.dao.BookingCounterDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Types;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,12 +27,14 @@ public class BookingCounterDAOImpl implements BookingCounterDAO{
 
   @Override
   public Map<String, Integer> getAll() {
-    Map<String, Object> result = jdbcTemplate.queryForMap(GET_ALL);
-    Map<String, Integer> resultMap = new HashMap<>();
-    for (Map.Entry<String, Object> entry : result.entrySet()) {
-      resultMap.put(entry.getKey(), Integer.parseInt(entry.getValue().toString()));
-    }
-    return resultMap;
+    jdbcTemplate.query(GET_ALL, (ResultSetExtractor<Map>) rs -> {
+      HashMap<String,Integer> mapRet= new HashMap<String,Integer>();
+      while(rs.next()){
+        mapRet.put(rs.getString(1),rs.getInt(2));
+      }
+      return mapRet;
+    });
+    return Collections.emptyMap();
   }
 
   @Override
@@ -44,7 +48,7 @@ public class BookingCounterDAOImpl implements BookingCounterDAO{
   @Override
   public void put(String name, int occurrences) {
     Object[] values = {name, occurrences};
-    int[] types = {Types.INTEGER, Types.VARCHAR};
+    int[] types = {Types.VARCHAR, Types.INTEGER};
     jdbcTemplate.update(SET_OCCURRENCES, values, types);
   }
 }

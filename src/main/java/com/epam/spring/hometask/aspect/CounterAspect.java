@@ -69,9 +69,10 @@ public class CounterAspect {
       pointcut = "execBookingServiceGetTicketPrice(event)", argNames = "jp,event")
   public void afterBookingServiceGetTicketPrice(JoinPoint jp, Event event) {
     String eventName = event.getName();
-    if (priceCounterDao.getAll().containsKey(eventName)) {
-      priceCounterDao.put(eventName, priceCounterDao.get(eventName) + 1);
-    } else {
+      if (priceCounterDao.getAll().containsKey(eventName)) {
+        priceCounterDao.put(eventName, priceCounterDao.get(eventName) + 1);
+      }
+     else {
       priceCounterDao.put(eventName, 1);
     }
 

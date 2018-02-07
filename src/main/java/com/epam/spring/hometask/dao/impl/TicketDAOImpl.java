@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -45,10 +46,12 @@ public class TicketDAOImpl implements TicketDAO {
   @Override
   public Ticket save(Ticket ticket) throws DAOException {
     Integer id = GeneratorId.generateId();
-    Object[] values = {id, ticket.getUser().getId(), ticket.getEvent().getId(), ticket.getDateTime(), ticket.getSeat(), ticket.getPrice()};
+    Date dateEvent =  Date.valueOf(ticket.getDateTime().toLocalDate());
+    Object[] values = {id, ticket.getUser().getId(), ticket.getEvent().getId(), dateEvent, ticket.getSeat(), ticket.getPrice()};
     int[] types = {Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.DATE, Types.INTEGER, Types.FLOAT};
     jdbcTemplate.update(INSERT_QUERY, values, types);
-    return getById(id);
+    ticket.setId(id);
+    return ticket;
   }
 
   @Override

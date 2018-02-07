@@ -57,7 +57,8 @@ public class EventDAOImpl implements EventDAO {
     Object[] values = {id, event.getName(), event.getBasePrice(), event.getRating().name()};
     int[] types = {Types.INTEGER, Types.VARCHAR, Types.DOUBLE, Types.VARCHAR};
     jdbcTemplate.update(INSERT_QUERY, values, types);
-    return getById(id);
+    event.setId(id);
+    return event;
   }
 
   @Override

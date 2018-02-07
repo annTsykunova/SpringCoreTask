@@ -75,8 +75,8 @@ public class SpringHometaskConsoleUI {
 
         Auditorium auditoriumVelc = (Auditorium) context.getBean("auditoriumVelc");
         Auditorium auditoriumOct = (Auditorium) context.getBean("auditoriumOct");
-       // auditoriumService.save(auditoriumOct);
-        //auditoriumService.save(auditoriumVelc);
+        auditoriumService.save(auditoriumOct);
+        auditoriumService.save(auditoriumVelc);
         
         Auditorium auditorium = auditoriumService.getAll().iterator().next();
         if (auditorium == null) {
